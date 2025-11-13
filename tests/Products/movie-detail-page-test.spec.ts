@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
-import { HomePage } from "../../pages/HomePage"
-import { MovieDetailPage } from "../../pages/MovieDetailPage";
+import { HomePage } from "../../pages/homepages/HomePage"
+import { MovieDetailPage } from "../../pages/booking/MovieDetailPage";
 
 test("Test View Movie Detail", async ({ page }) => {
     const homePage: HomePage = new HomePage(page);

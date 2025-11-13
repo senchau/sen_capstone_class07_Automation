@@ -1,5 +1,3 @@
-
-
 import { Locator, Page } from '@playwright/test';
 
 type PlaywrightLocator = string | Locator;
@@ -11,7 +9,8 @@ export class BasePage {
     this.page = page;
   }
 
-  async navigateTo(url: string) {
+  // ✅ Sửa cú pháp và thêm kiểu trả về
+  async navigateTo(url: string): Promise<void> {
     await this.page.goto(url);
   }
 
@@ -19,13 +18,13 @@ export class BasePage {
     return typeof locator === 'string' ? this.page.locator(locator) : locator;
   }
 
-  async click(locator: PlaywrightLocator, timeout = 10000) {
+  async click(locator: PlaywrightLocator, timeout = 10000): Promise<void> {
     const element = this.getLocator(locator);
     await element.waitFor({ state: 'visible', timeout });
     await element.click();
   }
 
-  async fill(locator: PlaywrightLocator, value: string, timeout = 10000) {
+  async fill(locator: PlaywrightLocator, value: string, timeout = 10000): Promise<void> {
     const element = this.getLocator(locator);
     await element.waitFor({ state: 'visible', timeout });
     await element.fill(value);
