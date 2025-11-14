@@ -1,40 +1,42 @@
 import test, { expect } from "@playwright/test";
 import { RegisterPage } from "../../pages/authen/RegisterPage";
 import { HomePage } from "../../pages/homepages/HomePage"
+import { HOME_PAGE_DOMAIN } from "../../pages/constants";
+import { TopBarNavigationPage } from "../../pages/components/TopBarNavigationPage";
 
 test('Valid Register test', async ({ page }) => {
-    let homePage: HomePage = new HomePage(page);
-    let registerPage: RegisterPage = new RegisterPage(page);
+    // Mở trang chủ
+    await page.goto(HOME_PAGE_DOMAIN);
+
+    const topbarNavigationPage = new TopBarNavigationPage(page, 'vi');
+
+    // Chờ popup đăng ký hiển thị
+    const isNavigatedToSignUp = await topbarNavigationPage.goToSignUpPage();
+    expect(isNavigatedToSignUp, "Không mở được popup đăng ký").toBe(true);
+
+    const registerPage = new RegisterPage(page, 'vi');
 
     const random = Math.floor(Math.random() * 100000);
-    const account = `user${random}`
+    const account = `user${random}`;
     const email = `user${random}@example.com`;
     const password = `Pass@${random}`;
 
-
-    homePage.navigateTo('https://demo1.cybersoft.edu.vn/');
-    // Step 1: Click Đăng Ký button
+    // Click Đăng Ký để mở form (nếu cần)
     await registerPage.clickRegister();
 
-    //  Step 2: Enter Account
-    await registerPage.enterAccount(account);
+    // Điền thông tin đăng ký
+    await registerPage.fillAccount(account);
+    await registerPage.fillPassword(password);
+    await registerPage.fillConfirmPassword(password);
+    await registerPage.fillFullname("user test");
+    await registerPage.fillEmail(email);
 
-    // Step 3: Enter Password
-    await registerPage.enterPassword(password);
+    // Submit form
+    await registerPage.submitRegisterBtn();
 
-    // Step 4: Enter Confirm Password
-    await registerPage.enterConfirmPassword(password);
+    // Verify success message hiển thị
+    await expect(registerPage.getRegisterMsgLocator()).toBeVisible({ timeout: 5000 });
 
-    // Step 5: Enter Full Name
-    await registerPage.enterFullName("user test");
-
-    // Step 6: Enter Email
-    await registerPage.enterEmail(email);
-
-    // Step 7: Click Đăng ký button
-    await registerPage.clickRegisterFinal();
-
-    // Step 8: VP Register successfully message
-
-    await expect(registerPage.getRegisterMsgLocator()).toBeVisible();
-})
+    // Pause để debug nếu cần
+    await page.pause();
+});

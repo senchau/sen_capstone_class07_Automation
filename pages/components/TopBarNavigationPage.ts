@@ -11,23 +11,47 @@ export class TopBarNavigationPage extends BasePage {
     readonly userProfile = "Avatar %s";
 
     private readonly lang: Record<string, string>;
-    readonly registerBtnLocator!: Locator
+    readonly signInBtnLocator!: Locator
+    readonly signUpBtnLocator!: Locator
+    readonly signInUrl = "sign-in"
+    readonly signUpUrl = "sign-up"
 
 
     constructor(page: Page, locale: Locale) {
         super(page);
 
         this.lang = LANGUAGE[locale]
-        this.registerBtnLocator = this.page.locator('//a[@href="/sign-up"]');
+        this.signInBtnLocator = this.page.locator(`//a[@href="/${this.signInUrl}"]`);
+        this.signUpBtnLocator = this.page.locator(`//a[@href="/${this.signUpUrl}"]`);
     }
 
-    async openRegisterFormModal(): Promise<void> {
+    async goToSignInPage(): Promise<boolean> {
         try {
-            await this.registerBtnLocator.click()
+            await this.signInBtnLocator.click()
+            await this.page.waitForURL(`**/${this.signInUrl}`)
 
+            return true
+        } catch (err) {
+            console.log({
+                context: 'TopBarNavigationPage.goToSignInPage',
+                errorMessage: (err as Error).message
+            })
+            return false
+        }
+    }
 
-        } catch (e) {
+    async goToSignUpPage(): Promise<boolean> {
+        try {
+            await this.signUpBtnLocator.click()
+            await this.page.waitForURL(`**/${this.signUpUrl}`)
 
+            return true
+        } catch (err) {
+            console.log({
+                context: 'TopBarNavigationPage.goToSignUpPage',
+                errorMessage: (err as Error).message
+            })
+            return false
         }
     }
 

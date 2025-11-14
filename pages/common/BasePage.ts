@@ -9,7 +9,7 @@ export class BasePage {
     this.page = page;
   }
 
-  // ✅ Sửa cú pháp và thêm kiểu trả về
+
   async navigateTo(url: string): Promise<void> {
     await this.page.goto(url);
   }
