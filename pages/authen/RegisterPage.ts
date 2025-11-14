@@ -18,8 +18,10 @@ export class RegisterPage extends CommonPage {
     readonly lblInvalidPasswordMsg = this.page.getByText('Mật khẩu phải có ít nhất 6 k');
     readonly lblFullNameMsg = this.page.locator('#hoTen-helper-text');
     readonly lblFullNameNumMsg = this.page.getByText('Họ và tên không chứa số !');
-    readonly lblExistEmailMsg = this.page.getByText(/Email đã tồn tại/i);
-    readonly lblInvalidEmailMsg = this.page.getByText(/Tài khoản đã tồn tại/i);
+    // readonly lblGlobalErrorMsg = this.page.getByText('Email đã tồn tại').or(this.page.getByText('Tài khoản đã tồn tại'));
+
+    readonly lblGlobalMsg = this.page.getByText('Email đã tồn tại');
+    // readonly lblInvalidEmailMsg = this.page.getByText('Email đã tồn tại!');
 
 
     constructor(page: Page) {
@@ -53,33 +55,46 @@ export class RegisterPage extends CommonPage {
         await this.getText(this.lblRegisterMsg);
     }
     // Lấy message lỗi theo từng field
-    async getErrorMessage(fieldName: string): Promise<string | null> {
+    async getErrorMessageRegister(fieldName: string): Promise<string | null> {
         switch (fieldName.toLowerCase()) {
             case 'account':
-                if (await this.lblAccountMsg.isVisible()) return await this.lblAccountMsg.textContent();
-                break;
+                return await this.lblAccountMsg.textContent();
 
             case 'password':
-                if (await this.lblPasswordMsg.isVisible()) return await this.lblPasswordMsg.textContent();
-                if (await this.lblInvalidPasswordMsg.isVisible()) return await this.lblInvalidPasswordMsg.textContent();
-                break;
+                return await this.lblPasswordMsg.textContent()
+                    || await this.lblInvalidPasswordMsg.textContent();
 
-            case 'confirm':
             case 'confirmpassword':
-                if (await this.lblConfirmPasswordMsg.isVisible()) return await this.lblConfirmPasswordMsg.textContent();
-                break;
+                return await this.lblConfirmPasswordMsg.textContent();
 
             case 'fullname':
-                if (await this.lblFullNameMsg.isVisible()) return await this.lblFullNameMsg.textContent();
-                if (await this.lblFullNameNumMsg.isVisible()) return await this.lblFullNameNumMsg.textContent();
-                break;
-
-            case 'email':
-                if (await this.lblExistEmailMsg.isVisible()) return await this.lblExistEmailMsg.textContent();
-                if (await this.lblInvalidEmailMsg.isVisible()) return await this.lblInvalidEmailMsg.textContent();
-                break;
+                return await this.lblFullNameMsg.textContent()
+                    || await this.lblFullNameNumMsg.textContent();
         }
-        return null;
+        return ''
     }
+
+    async getGlobalErrorMessage(): Promise<string> {
+        await this.lblGlobalMsg.waitFor({ state: 'visible', timeout: 20000 })
+        if (await this.lblGlobalMsg.isVisible()) {
+            return 'Email đã tồn tại!';
+        }
+
+        return '';
+    }
+
+    // case 'email':
+    //     if (await this.lblExistEmailMsg.isVisible()) {
+    //         return await this.lblExistEmailMsg.textContent();
+    //     }
+    //     if (await this.lblInvalidEmailMsg.isVisible()) {
+    //         return await this.lblInvalidEmailMsg.textContent();
+    //     }
+    //     return null;
+
+    // default:
+    //     return null;
 }
+
+
 

@@ -32,7 +32,8 @@ test('Valid select seat test', async ({ page }) => {
     // Step 8: Click Dat Ve button
     await seatSelectionPage.clickbtnDatVe();
 
-    // Step 9: Verify error message
+    // Step 9: Verify error warning Login message
+
 });
 
 
