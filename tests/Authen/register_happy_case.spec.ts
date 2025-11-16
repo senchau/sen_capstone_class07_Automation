@@ -1,6 +1,6 @@
 import test, { expect } from "@playwright/test";
 import { RegisterPage } from "../../pages/authen/RegisterPage";
-import { HomePage } from "../../pages/homepages/HomePage"
+import { HomePage } from "../../pages/menu_pages/HomePage"
 
 test('Valid Register test', async ({ page }) => {
     let homePage: HomePage = new HomePage(page);

@@ -3,6 +3,7 @@ import { CommonPage } from "../common/CommonPage";
 
 
 export class LoginPage extends CommonPage {
+    readonly lblLoginForm = this.page.getByRole('heading', { name: 'Đăng nhập', exact: true });
     readonly txtAccountLogin = this.page.getByRole('textbox', { name: 'Tài Khoản' });
     readonly txtPasswordLogin = this.page.getByRole('textbox', { name: 'Mật Khẩu' });
     readonly btnLogin = this.page.getByRole('button', { name: 'Đăng nhập' });
@@ -20,6 +21,9 @@ export class LoginPage extends CommonPage {
     constructor(page: Page) {
         super(page);
 
+    }
+    getlblLoginFormLocator(): Locator {
+        return this.lblLoginForm;
     }
     getLoginMsgLocator(): Locator {
         return this.lblLoginMsg;
