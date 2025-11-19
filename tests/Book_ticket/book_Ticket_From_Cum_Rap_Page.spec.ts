@@ -1,10 +1,10 @@
 import test, { expect } from "@playwright/test";
-import { TopBarNavigation } from "../../pages/components/TopBarNavigation";
+import { TopBarNavigationPage } from "../../pages/components/TopBarNavigationPage";
 import { HomePage } from "../../pages/menu_pages/HomePage";
 import { CumRapPage } from "../../pages/menu_pages/CumRapPage";
 
 test('Book Ticket From Cum Rap Menu', async ({ page }) => {
-    const topBarNavigation = new TopBarNavigation(page);
+    const topBarNavigation = new TopBarNavigationPage(page, 'vi');
     const homePage = new HomePage(page);
     const cumRapPage = new CumRapPage(page);
 

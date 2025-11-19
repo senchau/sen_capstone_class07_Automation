@@ -206,7 +206,6 @@ test(globalEmailErrorMessageCase.title, async ({ page }) => {
         expect(isShowSignUp, "Không mở được popup đăng ký").toBe(true);
     }
 
-
     await registerPage.fillAccount(globalEmailErrorMessageCase.account);
     await registerPage.fillPassword(globalEmailErrorMessageCase.password);
     await registerPage.fillConfirmPassword(globalEmailErrorMessageCase.confirmPassword);
