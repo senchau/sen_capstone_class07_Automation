@@ -6,7 +6,7 @@ export class CommonPage extends BasePage {
     readonly topBarNavigation: TopBarNavigation
 
     constructor(page: Page) {
-        super(page);
+ super(page);
         this.topBarNavigation = new TopBarNavigation(page);
     }
 }

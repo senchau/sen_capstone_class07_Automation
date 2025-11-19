@@ -1,35 +1,81 @@
 import test, { expect } from "@playwright/test";
-import { HomePage } from "../../pages/menu_pages/HomePage";
+import { TopBarNavigationPage } from "../../pages/components/TopBarNavigationPage";
+import { LogoutConfirmPage } from "../../pages/authen/LogoutConfirmPage";
+import { HOME_PAGE_DOMAIN, LANGUAGE } from "../../pages/constants";
 import { LoginPage } from "../../pages/authen/LoginPage";
-import { LogoutPage } from "../../pages/authen/LogoutPage";
 
-test('valid logout test', async ({ page }) => {
-    const homePage = new HomePage(page);
-    const loginPage = new LoginPage(page);
-    const logoutPage = new LogoutPage(page);
+// test('valid logout test', async ({ page }) => {
+//     const homePage = new HomePage(page);
+//     const loginPage = new LoginPage(page);
+//     const logoutPage = new LogoutPage(page);
 
-    // Navigate to home page
-    await homePage.navigateTo('https://demo1.cybersoft.edu.vn/');
+//     // Navigate to home page
+//     await homePage.navigateTo('https://demo1.cybersoft.edu.vn/');
+
+//     // Step 1: Login
+//     await homePage.topBarNavigation.navigateLoginPage();
+//     await loginPage.login("Testbb02a63727a845bc850256c55d2c1b77", "Test123456@");
+
+//     // Step 2: Click Logout button
+//     await logoutPage.clickLogout();
+
+//     // Step 3: VP1 Confirm Logout popup
+//     await expect(logoutPage.getLogoutConfirmMsgLocator()).toBeVisible();
+
+//     // Step 4: Click Cancel button on confirm popup
+//     await logoutPage.clickCancelLogout();
+
+//     // Step 5: Click Logout button again
+//     await logoutPage.clickLogoutAgain();
+
+//     // Step 6: Click Agree button on confirm popup
+//     await logoutPage.clickAgreeLogout();
+
+//     // Step 7: VP2 Verify logout message successfully
+//     await expect(logoutPage.getLogoutMsgLocator()).toBeVisible();
+// });
+
+test('User logout with confirm popup', async ({ page }) => {
+    const locale = 'vi';
+    await page.goto(HOME_PAGE_DOMAIN);
+    const lang = LANGUAGE[locale];
+    const topbarNavigation = new TopBarNavigationPage(page, 'vi');
+    const loginPage = new LoginPage(page, 'vi');
+    const logoutConfirmPopup = new LogoutConfirmPage(page, 'vi');
 
     // Step 1: Login
-    await homePage.topBarNavigation.navigateLoginPage();
+    await topbarNavigation.goToSignInPage();
     await loginPage.login("Testbb02a63727a845bc850256c55d2c1b77", "Test123456@");
 
-    // Step 2: Click Logout button
-    await logoutPage.clickLogout();
+    // Step 1: Open Logout popup
+    await topbarNavigation.openLogoutConfirmPopup();
 
-    // Step 3: VP1 Confirm Logout popup
-    await expect(logoutPage.getLogoutConfirmMsgLocator()).toBeVisible();
+    // Step 2: Confirm logout
+    await logoutConfirmPopup.confirmLogout();
 
-    // Step 4: Click Cancel button on confirm popup
-    await logoutPage.clickCancelLogout();
+    // Step 3: Verify loglout successfully popup
+    const logoutSuccessfullyMessage = await logoutConfirmPopup.getLogoutSuccessfullyMessage();
+    expect(logoutSuccessfullyMessage).toContain(lang.logoutSuccessfullyMessage);
 
-    // Step 5: Click Logout button again
-    await logoutPage.clickLogoutAgain();
+});
 
-    // Step 6: Click Agree button on confirm popup
-    await logoutPage.clickAgreeLogout();
+test('User cancel logout', async ({ page }) => {
+    const locale = 'vi';
+    await page.goto(HOME_PAGE_DOMAIN);
+    const lang = LANGUAGE[locale];
+    const topbarNavigation = new TopBarNavigationPage(page, 'vi');
+    const loginPage = new LoginPage(page, 'vi');
+    const logoutConfirmPopup = new LogoutConfirmPage(page, 'vi');
 
-    // Step 7: VP2 Verify logout message successfully
-    await expect(logoutPage.getLogoutMsgLocator()).toBeVisible();
+    // Step 1: Login
+    await topbarNavigation.goToSignInPage();
+    await loginPage.login("Testbb02a63727a845bc850256c55d2c1b77", "Test123456@");
+
+    // Step 1: Open Logout popup
+    await topbarNavigation.openLogoutConfirmPopup();
+
+    // Step 2: Confirm logout
+    await logoutConfirmPopup.cancelLogout();
+
+
 });

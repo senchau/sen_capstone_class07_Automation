@@ -13,8 +13,10 @@ export class TopBarNavigationPage extends BasePage {
     private readonly lang: Record<string, string>;
     readonly signInBtnLocator!: Locator
     readonly signUpBtnLocator!: Locator
+    readonly logoutBtnLocator!: Locator
     readonly signInUrl = "sign-in"
     readonly signUpUrl = "sign-up"
+
 
 
     constructor(page: Page, locale: Locale) {
@@ -23,6 +25,7 @@ export class TopBarNavigationPage extends BasePage {
         this.lang = LANGUAGE[locale]
         this.signInBtnLocator = this.page.locator(`//a[@href="/${this.signInUrl}"]`);
         this.signUpBtnLocator = this.page.locator(`//a[@href="/${this.signUpUrl}"]`);
+        this.logoutBtnLocator = this.page.locator("//h3[contains(text(), 'Đăng xuất')]");
     }
 
     async goToSignInPage(): Promise<boolean> {
@@ -53,6 +56,10 @@ export class TopBarNavigationPage extends BasePage {
             })
             return false
         }
+    }
+
+    async openLogoutConfirmPopup(): Promise<void> {
+        await this.logoutBtnLocator.click();
     }
 
     getUserProfileLocator(userName: string): Locator {

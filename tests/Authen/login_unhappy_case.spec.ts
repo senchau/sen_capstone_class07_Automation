@@ -1,36 +1,103 @@
 import test, { expect } from "@playwright/test";
 import { HomePage } from "../../pages/menu_pages/HomePage";
 import { LoginPage } from "../../pages/authen/LoginPage";
+import { HOME_PAGE_DOMAIN, LANGUAGE } from "../../pages/constants";
+import { TopBarNavigationPage } from "../../pages/components/TopBarNavigationPage";
 
-const negativeUsersLogin = [
-    { account: '', password: 'Test123456@', field: 'account', message: 'Đây là trường bắt buộc !' },
-    { account: 'user2', password: '', field: 'password', message: 'Đây là trường bắt buộc !' },
-    { account: 'user3', password: '123', field: 'password', message: 'Mật khẩu phải có ít nhất 6 kí tự !' },
-    { account: 'user4', password: 'Test123456@', field: 'login', message: 'Tài khoản hoặc mật khẩu không đúng!' },
-];
+const locale = 'vi';
 
-for (const users of negativeUsersLogin) {
-    test(`Invalid Login test - [${users.account}] - ${users.message}`, async ({ page }) => {
-        const homePage = new HomePage(page);
-        const loginPage = new LoginPage(page);
-
-        // Step 1: Navigate to homepage
-        await homePage.navigateTo('https://demo1.cybersoft.edu.vn/');
-
-        // Step 2: Click “Đăng Nhập”
-        await homePage.topBarNavigation.navigateLoginPage();
-
-        // Step 3: Fill form
-        await loginPage.enterUserName(users.account);
-        await loginPage.enterPassWord(users.password);
-
-        // Step 4: Click Login
-        await loginPage.clickLogin();
-
-        // Step 5: Get error message
-        const errorMsg = await loginPage.getErrorMessageLogin(users.field);
-
-        // Step 6: Assert
-        expect(errorMsg?.trim()).toContain(users.message);
-    });
+const mandotoryFieldLoginCase =
+{
+    account: '', password: '',
+    title: 'Account, Password is required',
 }
+
+const validationPasswordLoginCase =
+{
+    account: 'user4', password: 'Pass',
+    title: 'Password should be greater than 6 characters',
+}
+
+const globalLoginErrorMessageCase = {
+    account: 'user6', password: 'Pass@123',
+    title: 'Account and Password should be matched',
+
+};
+
+
+
+test(mandotoryFieldLoginCase.title, async ({ page }) => {
+    const lang = LANGUAGE[locale];
+
+    await page.goto(HOME_PAGE_DOMAIN);
+
+    const topbarNavigationPage = new TopBarNavigationPage(page, locale);
+    await topbarNavigationPage.goToSignInPage();
+
+    const isNavigatedToSignIn = await topbarNavigationPage.goToSignInPage();
+    expect(isNavigatedToSignIn, "Không mở được popup đăng nhập").toBe(true);
+    const loginPage = new LoginPage(page, locale);
+
+    // Chờ popup đăng nhập hiển thị
+    await loginPage.waitLoginModal
+
+    await loginPage.fillAccount(mandotoryFieldLoginCase.account);
+    await loginPage.fillPassword(mandotoryFieldLoginCase.password);
+    await loginPage.submitloginBtn();
+
+    const accountLoginErrorMessage = await loginPage.getAccountLoginErrorMessage();
+    expect(accountLoginErrorMessage).toContain(lang.mandatoryField);
+
+    const passwordLoginErrorMessage = await loginPage.getPasswordLoginErrorMessage();
+    expect(passwordLoginErrorMessage).toContain(lang.mandatoryField);
+
+})
+
+test(validationPasswordLoginCase.title, async ({ page }) => {
+    const lang = LANGUAGE[locale];
+
+    await page.goto(HOME_PAGE_DOMAIN);
+
+    const topbarNavigationPage = new TopBarNavigationPage(page, locale);
+    await topbarNavigationPage.goToSignInPage();
+
+    const isNavigatedToSignIn = await topbarNavigationPage.goToSignInPage();
+    expect(isNavigatedToSignIn, "Không mở được popup đăng nhập").toBe(true);
+    const loginPage = new LoginPage(page, locale);
+
+    // Chờ popup đăng nhập hiển thị
+    await loginPage.waitLoginModal
+
+    await loginPage.fillAccount(validationPasswordLoginCase.account);
+    await loginPage.fillPassword(validationPasswordLoginCase.password);
+    await loginPage.submitloginBtn();
+
+    const passwordLoginErrorMessage = await loginPage.getPasswordLoginErrorMessage();
+    expect(passwordLoginErrorMessage).toContain(lang.passwordGreaterThan6Characters);
+
+})
+
+test(globalLoginErrorMessageCase.title, async ({ page }) => {
+    const lang = LANGUAGE[locale];
+
+    await page.goto(HOME_PAGE_DOMAIN);
+
+    const topbarNavigationPage = new TopBarNavigationPage(page, locale);
+    await topbarNavigationPage.goToSignInPage();
+
+    const isNavigatedToSignIn = await topbarNavigationPage.goToSignInPage();
+    expect(isNavigatedToSignIn, "Không mở được popup đăng nhập").toBe(true);
+    const loginPage = new LoginPage(page, locale);
+
+    // Chờ popup đăng nhập hiển thị
+    await loginPage.waitLoginModal
+
+    await loginPage.fillAccount(globalLoginErrorMessageCase.account);
+    await loginPage.fillPassword(globalLoginErrorMessageCase.password);
+    await loginPage.submitloginBtn();
+
+    const globalAccountErrorMessage = await loginPage.getglobalLoginErrorMessage();
+    expect(globalAccountErrorMessage).toContain(lang.globalLoginErrorMessage);
+
+})
+
