@@ -1,12 +1,12 @@
 import { Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
-import { TopBarNavigation } from "../components/TopBarNavigation";
+import { TopBarNavigationPage } from "../components/TopBarNavigationPage";
 
 export class CommonPage extends BasePage {
-    readonly topBarNavigation: TopBarNavigation
+    readonly topBarNavigation: TopBarNavigationPage
 
     constructor(page: Page) {
-        super(page);
-        this.topBarNavigation = new TopBarNavigation(page);
+ super(page);
+        this.topBarNavigation = new TopBarNavigationPage(page, 'vi');
     }
 }

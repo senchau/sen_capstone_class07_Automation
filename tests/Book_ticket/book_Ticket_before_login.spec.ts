@@ -9,7 +9,7 @@ test('Valid select seat test', async ({ page }) => {
     const homePage: HomePage = new HomePage(page);
     const movieDetailPage = new MovieDetailPage(page);
     const seatSelectionPage = new SeatSelectionPage(page);
-    const loginPage = new LoginPage(page);
+    const loginPage = new LoginPage(page, 'vi');
 
     // Step 1: Open Homepage
     await homePage.navigateTo("https://demo1.cybersoft.edu.vn/");

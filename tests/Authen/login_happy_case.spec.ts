@@ -1,27 +1,43 @@
 import { expect, test } from '@playwright/test';
-import { HomePage } from '../../pages/menu_pages/HomePage';
 import { LoginPage } from '../../pages/authen/LoginPage';
+import { RegisterPage } from '../../pages/authen/RegisterPage';
+import { HOME_PAGE_DOMAIN, LANGUAGE } from '../../pages/constants';
+import { TopBarNavigationPage } from '../../pages/components/TopBarNavigationPage';
+
 
 test('Valid login test', async ({ page }) => {
+  const locale = 'vi';
 
-  let homePage: HomePage = new HomePage(page);
-  let loginPage: LoginPage = new LoginPage(page);
+  await page.goto(HOME_PAGE_DOMAIN);
 
-  homePage.navigateTo('https://demo1.cybersoft.edu.vn/');
+  const topbarNavigationPage = new TopBarNavigationPage(page, locale);
+  const lang = LANGUAGE[locale];
 
-  // Step 1: Click "Đăng Nhập"
-  await homePage.topBarNavigation.navigateLoginPage();
+  await topbarNavigationPage.goToSignUpPage();
 
-  // Step 2: Enter Username
+  const registerPage = new RegisterPage(page, locale);
 
-  // Step 3: Enter Password
+  const randomUser = await registerPage.registerRandomUser();
+  await page.waitForTimeout(1000)
+  await page.goto(HOME_PAGE_DOMAIN);
 
-  // Step 4: Click Đăng Nhập
-  await loginPage.login("Testbb02a63727a845bc850256c55d2c1b77", "Test123456@");
+  const isNavigatedToSignIn = await topbarNavigationPage.goToSignInPage();
+  expect(isNavigatedToSignIn, "Không mở được popup đăng nhập").toBe(true);
+  const loginPage = new LoginPage(page, locale);
+
+  // Chờ popup đăng nhập hiển thị
+  await loginPage.waitLoginModal
+
+
+  // Fill Account, Password + CLick Login Btn
+  await loginPage.login(randomUser.account, randomUser.password);
 
   // Step 5: Verify login successfully
-  await expect(loginPage.getLoginMsgLocator()).toBeVisible();
+  const loginSuccessfullyMessage = await loginPage.getLoginSuccessfullyMessage();
+  expect(loginSuccessfullyMessage).toContain(lang.loginSuccessfullyMessage);
+
+
 
   // Step 6: Verify user profile
-  await expect(homePage.topBarNavigation.getUserProfileLocator("John Kenny")).toBeVisible();
+  await expect(topbarNavigationPage.getUserProfileLocator(randomUser.account)).toBeVisible();
 });

@@ -1,70 +1,119 @@
 import { Locator, Page } from "@playwright/test";
-import { CommonPage } from "../common/CommonPage";
+import { BasePage } from "../common/BasePage";
+import { LANGUAGE } from "../constants";
+import { Locale } from "../types";
 
 
-export class LoginPage extends CommonPage {
-    readonly lblLoginForm = this.page.getByRole('heading', { name: 'Đăng nhập', exact: true });
-    readonly txtAccountLogin = this.page.getByRole('textbox', { name: 'Tài Khoản' });
-    readonly txtPasswordLogin = this.page.getByRole('textbox', { name: 'Mật Khẩu' });
-    readonly btnLogin = this.page.getByRole('button', { name: 'Đăng nhập' });
-    readonly lblLoginMsg = this.page.getByRole('heading', { name: 'Đăng nhập thành công' });
-    readonly btnDoNotHaveAccount = this.page.getByRole('link', { name: 'Bạn chưa có tài khoản? Đăng ký' });
-    readonly lblRegister = this.page.getByRole('heading', { name: 'Đăng ký', exact: true });
+export class LoginPage extends BasePage {
+    private readonly lang: Record<string, string>;
+    readonly accountLocator!: Locator
+    readonly passwordLocator!: Locator
+    readonly loginBtnLocator!: Locator
+    readonly loginTextLocator!: Locator
 
-    // Error message
-    readonly lblAccountLoginMsg = this.page.locator('#taiKhoan-helper-text');  // not fill account
-    readonly lblPasswordLoginMsg = this.page.locator('#matKhau-helper-text');   // not fill pass
-    readonly lblInvalidLoginMsg = this.page.getByText('Tài khoản hoặc mật khẩu không'); // fill invalid acc + pass
-    readonly lblInvalidPasswordMsg = this.page.getByText('Mật khẩu phải có ít nhất 6 k'); // fill invalid pass
+    readonly loginSuccessfullyMessageLocator!: Locator
+    readonly accountLoginErrorMessageLocator!: Locator
+    readonly passwordLoginErrorMessageLocator!: Locator
+    readonly globalLoginErrorMesageLocator!: Locator
 
 
-    constructor(page: Page) {
+    constructor(page: Page, locale: Locale) {
         super(page);
 
-    }
-    getlblLoginFormLocator(): Locator {
-        return this.lblLoginForm;
-    }
-    getLoginMsgLocator(): Locator {
-        return this.lblLoginMsg;
-    }
-    async enterUserName(value: string) {
-        await this.fill(this.txtAccountLogin, value);
-    }
-    async enterPassWord(value: string) {
-        await this.fill(this.txtPasswordLogin, value);
-    }
-    async clickLogin() {
-        await this.click(this.btnLogin);
-    }
-    async login(Username: string, Password: string) {
-        await this.enterUserName(Username);
-        await this.enterPassWord(Password);
-        await this.click(this.btnLogin);
-    }
-    async getLoginMessage() {
-        await this.getText(this.lblLoginMsg)
-    }
-    // Lấy message lỗi theo từng field
-    async getErrorMessageLogin(fieldName: string): Promise<string | null> {
-        switch (fieldName.toLowerCase()) {
-            case 'account':
-                if (await this.lblAccountLoginMsg.isVisible())
-                    return await this.lblAccountLoginMsg.textContent();
-                break;
-            case 'password':
-                if (await this.lblPasswordLoginMsg.isVisible())
-                    return await this.lblPasswordLoginMsg.textContent();
-                if (await this.lblInvalidPasswordMsg.isVisible())
-                    return await this.lblInvalidPasswordMsg.textContent();
-                break;
-            case 'login':  // thêm case cho invalid login chung
-                return await this.lblInvalidLoginMsg.textContent();
+        this.lang = LANGUAGE[locale]
+        this.accountLocator = this.page.locator('#taiKhoan');
+        this.passwordLocator = this.page.locator('#matKhau');
+        this.loginBtnLocator = this.page.locator(`//button[@type='submit'][normalize-space()='${this.lang.loginBtn}']`);
+        this.loginTextLocator = this.page.locator(`//h1[text()='Đăng nhập']`);
+        this.loginSuccessfullyMessageLocator = this.page.getByRole('heading', { name: 'Đăng nhập thành công' });
+        this.accountLoginErrorMessageLocator = this.page.locator('#taiKhoan-helper-text');
+        this.passwordLoginErrorMessageLocator = this.page.locator('#matKhau-helper-text');
+        this.globalLoginErrorMesageLocator = this.page.locator("div[role='alert'] div.MuiAlert-message");
 
+
+
+    }
+
+    async waitLoginModal(timeout: number): Promise<boolean> {
+        try {
+            await this.loginTextLocator.waitFor({ state: 'visible', timeout });
+            return true
+        } catch (err) {
+            console.log({
+                context: 'LoginPage.waitloginModal',
+                errorMessage: (err as Error)?.message ?? ''
+            })
+            return false
         }
-        return null;
+    }
 
+    async fillAccount(value: string): Promise<void> {
+        await this.fill(this.accountLocator, value);
 
     }
 
+    async fillPassword(value: string): Promise<void> {
+        await this.fill(this.passwordLocator, value);
+    }
+
+    async submitloginBtn() {
+        await this.click(this.loginBtnLocator);
+    }
+    async login(Account: string, Password: string) {
+        await this.fillAccount(Account);
+        await this.fillPassword(Password);
+        await this.click(this.loginBtnLocator);
+    }
+
+    async getLoginSuccessfullyMessage(): Promise<string> {
+        try {
+            const msg = await this.getText(this.loginSuccessfullyMessageLocator)
+            return !msg ? '' : msg
+        } catch (err) {
+            console.log({
+                context: 'LoginPage.getLoginSuccessfullyMessage',
+                errorMessage: (err as Error)?.message ?? ''
+            })
+            return ''
+        }
+    }
+
+    async getAccountLoginErrorMessage(): Promise<string> {
+        try {
+            const msg = await this.getText(this.accountLoginErrorMessageLocator)
+            return !msg ? '' : msg
+        } catch (err) {
+            console.log({
+                context: 'LoginPage.getAccountLoginErrorMessage',
+                errorMessage: (err as Error)?.message ?? ''
+            })
+            return ''
+        }
+    }
+
+    async getPasswordLoginErrorMessage(): Promise<string> {
+        try {
+            const msg = await this.getText(this.passwordLoginErrorMessageLocator)
+            return !msg ? '' : msg
+        } catch (err) {
+            console.log({
+                context: 'LoginPage.getPasswrodLoginErrorMessage',
+                errorMessage: (err as Error)?.message ?? ''
+            })
+            return ''
+        }
+    }
+
+    async getglobalLoginErrorMessage(): Promise<string> {
+        try {
+            const msg = await this.getText(this.globalLoginErrorMesageLocator)
+            return !msg ? '' : msg
+        } catch (err) {
+            console.log({
+                context: 'LoginPage.getGlobalLoginErrorMessage',
+                errorMessage: (err as Error)?.message ?? ''
+            })
+            return ''
+        }
+    }
 }

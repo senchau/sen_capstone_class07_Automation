@@ -7,7 +7,7 @@ import { SeatSelectionPage } from "../../pages/booking/SeatSelectionPage";
 
 test("Valid buy ticket test", async ({ page }) => {
   let homePage: HomePage = new HomePage(page);
-  let loginPage: LoginPage = new LoginPage(page);
+  let loginPage: LoginPage = new LoginPage(page, 'vi');
   let movieDetailPage = new MovieDetailPage(page);
   let selectSeatPage = new SeatSelectionPage(page);
 

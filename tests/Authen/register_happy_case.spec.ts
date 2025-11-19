@@ -1,40 +1,29 @@
 import test, { expect } from "@playwright/test";
 import { RegisterPage } from "../../pages/authen/RegisterPage";
-import { HomePage } from "../../pages/menu_pages/HomePage"
+import { HOME_PAGE_DOMAIN, LANGUAGE } from "../../pages/constants";
+import { TopBarNavigationPage } from "../../pages/components/TopBarNavigationPage";
+
 
 test('Valid Register test', async ({ page }) => {
-    let homePage: HomePage = new HomePage(page);
-    let registerPage: RegisterPage = new RegisterPage(page);
+    // Mở trang chủ
+    const locale = 'vi';
+    await page.goto(HOME_PAGE_DOMAIN);
 
-    const random = Math.floor(Math.random() * 100000);
-    const account = `user${random}`
-    const email = `user${random}@example.com`;
-    const password = `Pass@${random}`;
+    const topbarNavigationPage = new TopBarNavigationPage(page, locale);
+    const lang = LANGUAGE[locale];
 
 
-    homePage.navigateTo('https://demo1.cybersoft.edu.vn/');
-    // Step 1: Click Đăng Ký button
-    await registerPage.clickRegister();
+    // Chờ popup đăng ký hiển thị
+    const isNavigatedToSignUp = await topbarNavigationPage.goToSignUpPage();
+    expect(isNavigatedToSignUp, "Không mở được popup đăng ký").toBe(true);
 
-    //  Step 2: Enter Account
-    await registerPage.enterAccount(account);
+    const registerPage = new RegisterPage(page, locale);
 
-    // Step 3: Enter Password
-    await registerPage.enterPassword(password);
+    await registerPage.registerRandomUser();
 
-    // Step 4: Enter Confirm Password
-    await registerPage.enterConfirmPassword(password);
+    //  VP Register successfully message
+    const registerSuccessfullyMessage = await registerPage.getregisterSuccessfullyMessage();
+    expect(registerSuccessfullyMessage).toContain(lang.registerSuccessfullyMessage);
 
-    // Step 5: Enter Full Name
-    await registerPage.enterFullName("user test");
 
-    // Step 6: Enter Email
-    await registerPage.enterEmail(email);
-
-    // Step 7: Click Đăng ký button
-    await registerPage.clickRegisterFinal();
-
-    // Step 8: VP Register successfully message
-
-    await expect(registerPage.getRegisterMsgLocator()).toBeVisible();
-})
+});
