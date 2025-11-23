@@ -24,7 +24,7 @@ export class MovieDetailPage extends BasePage {
         this.btnViewTrailerVideoLocator = this.page.locator('button:has(span.MuiFab-label)');
         this.btnMuaVeLocator = this.page.locator("//a[normalize-space(.)='Mua vé']");
         this.btnSelectTimeSlotLocator = this.page.locator('div.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-3');
-        this.btnCloseTrailerVideoLocator = this.page.getByRole('button', { name: 'Close the modal by clicking' });
+        this.btnCloseTrailerVideoLocator = this.page.locator("//button[contains(@class, 'modal-video-close-btn')]");
     }
     async muaVeBtn(): Promise<void> {
         await this.btnMuaVeLocator.click();
@@ -71,7 +71,7 @@ export class MovieDetailPage extends BasePage {
 
     async viewTrailerVideoBtn(): Promise<void> {
         // Chờ button xuất hiện trong DOM
-        await this.btnViewTrailerVideoLocator.waitFor({ state: 'visible', timeout: 10000 });
+        await this.btnViewTrailerVideoLocator.waitFor({ state: 'attached', timeout: 10000 });
 
         // // Hover để hiện button
         // await this.btnViewTrailerVideoLocator.hover();
@@ -93,7 +93,7 @@ export class MovieDetailPage extends BasePage {
         await this.page.waitForTimeout(5000);
 
         // Lấy tất cả các time slot con trong #cinemaList
-        const timeSlotLocator = this.btnSelectTimeSlotLocator.locator('div.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-3');
+        const timeSlotLocator = this.page.locator('#vertical-tabpanel-0 div.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-3');
         const timeSlotCount = await timeSlotLocator.count();
         if (timeSlotCount === 0) {
             throw new Error("Không tìm thấy khung giờ chiếu");
