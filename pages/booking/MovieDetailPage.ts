@@ -84,7 +84,7 @@ export class MovieDetailPage extends BasePage {
     }
 
     async closeTrailerVideoBtn(): Promise<void> {
-        await this.page.waitForTimeout(5000);
+        await this.btnCloseTrailerVideoLocator.waitFor({ state: 'visible', timeout: 5000 });
         await this.btnCloseTrailerVideoLocator.click();
     }
 

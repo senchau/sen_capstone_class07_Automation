@@ -10,6 +10,8 @@ export class HomePage extends BasePage {
     readonly muaVeBtnLocator!: Locator
     readonly trailerVideoBtnLocator!: Locator
     readonly lstMoviesLocator!: Locator
+    readonly paginationNextBtnLocator!: Locator
+    readonly movieTitleLocator!: Locator
     
 
     constructor(page: Page, locale: Locale) {
@@ -19,6 +21,8 @@ export class HomePage extends BasePage {
         this.trailerVideoBtnLocator = this.page.locator("//img[@alt='video-button']/ancestor::button");
         this.lstMoviesLocator = this.page.locator('div.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-12.MuiGrid-grid-sm-4.MuiGrid-grid-md-3');
         this.muaVeBtnLocator = this.page.getByRole('link', { name: 'MUA VÉ', exact: true })
+        this.paginationNextBtnLocator = this.page.locator("//button[contains(@class, 'MuiIconButton-root') and .//svg[@class='MuiSvgIcon-root']]");
+    this.movieTitleLocator = this.page.locator('div.jss936');
     }
 
     async muaVeBtn(): Promise<void> {
@@ -50,6 +54,22 @@ export class HomePage extends BasePage {
         await movieItem.click();
 
         return movieTitle; // trả về tên movie để verify
+    }
+    
+    async getAllMovies(): Promise<{ title: string; description: string; c18: string }[]> {
+        const count = await this.lstMoviesLocator.count();
+        const movies = await Promise.all(
+            Array.from({ length: count }, (_, i) =>
+                (async () => {
+                    const card = this.lstMoviesLocator.nth(i);
+                    const title = (await card.locator('div.jss936').textContent())?.trim() || '';
+                    const description = (await card.locator("//div[contains(@class,'jss935')]/div/h4").textContent())?.trim() || '';
+                    const c18 = (await card.locator("//div[contains(@class,'jss1186')]/span").textContent())?.trim() || '';
+                    return { title, description, c18 };
+                })()
+            )
+        );
+        return movies;
     }
 
 

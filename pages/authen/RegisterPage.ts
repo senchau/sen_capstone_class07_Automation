@@ -20,7 +20,7 @@ export class RegisterPage extends BasePage {
   readonly confirmPasswordErrorMessageLocator!: Locator
   readonly fullnameErrorMessageLocator!: Locator
   readonly emailErrorMessageLocator!: Locator
-  readonly globalErrorMessageLocator!: Locator
+  readonly globalErrorMessageLocator !: Locator
   readonly registerSuccessfullyMessageLocator!: Locator
 
 
@@ -106,7 +106,7 @@ export class RegisterPage extends BasePage {
     await this.fill(this.fullnameLocator, value);
   }
 
-  async fillEmail(value: string) {
+  async fillEmail(value: string): Promise<void> {
     await this.fill(this.emailLocator, value);
   }
 

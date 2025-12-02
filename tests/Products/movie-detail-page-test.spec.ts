@@ -5,8 +5,8 @@ import { HOME_PAGE_DOMAIN, LANGUAGE } from "../../pages/constants";
 
 test("Test View Movie Detail", async ({ page }) => {
     const locale = 'vi';
-    const homePage = new HomePage(page, locale);
-    const movieDetailPage = new MovieDetailPage(page, locale);
+    const homePage = new HomePage(page, 'vi');
+    const movieDetailPage = new MovieDetailPage(page, 'vi');
 
     await page.goto(HOME_PAGE_DOMAIN);
 

@@ -5,8 +5,7 @@ import { HOME_PAGE_DOMAIN, LANGUAGE } from '../../pages/constants'
 
 const locale = 'vi'
 
-const mandotoryFieldCase =
-{
+const mandotoryFieldCase = {
     account: '', password: '', confirmPassword: '', fullName: '', email: '',
     title: 'Account, password, confirm password, fullname, email should be required',
 }
@@ -43,11 +42,11 @@ test(mandotoryFieldCase.title, async ({ page }) => {
 
     await page.goto(HOME_PAGE_DOMAIN);
 
-    const topbarNavigationPage = new TopBarNavigationPage(page, locale)
+    const topbarNavigationPage = new TopBarNavigationPage(page, 'vi')
 
     const isNavigatedToSignUp = await topbarNavigationPage.goToSignUpPage();
 
-    const registerPage = new RegisterPage(page, locale);
+    const registerPage = new RegisterPage(page, 'vi');
     const isShowSignUp = await registerPage.waitRegisterModal(20000);
 
     if (!isShowSignUp || !isNavigatedToSignUp) {

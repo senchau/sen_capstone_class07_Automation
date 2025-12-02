@@ -14,8 +14,10 @@ export class TopBarNavigationPage extends BasePage {
     readonly signInBtnLocator!: Locator
     readonly signUpBtnLocator!: Locator
     readonly logoutBtnLocator!: Locator
+    readonly userProfileLocator!: Locator
     readonly signInUrl = "sign-in"
     readonly signUpUrl = "sign-up"
+    readonly accountUrl = "account"
 
 
 
@@ -25,6 +27,7 @@ export class TopBarNavigationPage extends BasePage {
         this.lang = LANGUAGE[locale]
         this.signInBtnLocator = this.page.locator(`//a[@href="/${this.signInUrl}"]`);
         this.signUpBtnLocator = this.page.locator(`//a[@href="/${this.signUpUrl}"]`);
+        this.userProfileLocator = this.page.locator("//a[@href='/account']");
         this.logoutBtnLocator = this.page.locator("//h3[contains(text(), 'Đăng xuất')]");
     }
 
@@ -62,10 +65,26 @@ export class TopBarNavigationPage extends BasePage {
         await this.logoutBtnLocator.click();
     }
 
-    getUserProfileLocator(userName: string): Locator {
-        let expectedUserProfile = this.userProfile.replace('%s', userName);
-        return this.page.getByRole('link', { name: `${expectedUserProfile}` })
+    // getUserProfileLocator(userName: string): Locator {
+    //     let expectedUserProfile = this.userProfile.replace('%s', userName);
+    //     return this.page.getByRole('link', { name: `${expectedUserProfile}` })
+    // }
+
+    async goToAccountPage(): Promise<boolean> {
+    try {
+        await this.userProfileLocator.click();
+        await this.page.waitForURL(`**/${this.accountUrl}`);
+
+        return true;
+    } catch (err) {
+        console.log({
+            context: 'TopBarNavigationPage.goToAccountPage',
+            errorMessage: (err as Error).message
+        });
+        return false;
     }
+}
+
 
     async navigateLoginPage() {
         await this.click(this.lnkLogin);
