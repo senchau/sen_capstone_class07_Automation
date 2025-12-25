@@ -7,3 +7,7 @@ export interface ISignUpRandomUserResp {
 export interface ISignInResp {
   isSuccess: boolean;
 }
+
+export interface IFieldValidationMessage {
+  message: string;
+}

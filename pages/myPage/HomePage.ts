@@ -251,8 +251,8 @@ export class HomePage extends GlobalPage {
         const titleLocator = await infoContainerLocator.locator(
           "xpath=./div[1]/div[1]"
         );
-        let title = (await titleLocator.textContent()) || "";
-        title = title.replace(ageRestricted, "");
+        const titleData = await this.getText(titleLocator);
+        const title = titleData.data?.replace(ageRestricted, "") ?? "";
         movieObject.title = title;
 
         const descriptionLocator = eachMovieCardLocator.locator("h4");

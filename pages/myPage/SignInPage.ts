@@ -1,7 +1,10 @@
 import { Locator, Page } from "@playwright/test";
 import { GlobalPage } from "./GlobalPage";
 import { IBaseOutput, IGoInput } from "../../src/interfaces/commons";
-import { ISignInResp } from "../../src/interfaces/auths";
+import {
+  ISignInResp,
+  IFieldValidationMessage,
+} from "../../src/interfaces/auths";
 import { TLocale } from "../../src/types/locale";
 import { LANGUAGE } from "../../src/constants/language";
 import { SIGN_IN_PAGE_DOMAIN } from "../../src/constants/endpoint";
@@ -14,12 +17,9 @@ export class SignInPage extends GlobalPage {
   private readonly accountLocator!: Locator;
   private readonly passwordLocator!: Locator;
   private readonly signInCtaBtnLocator!: Locator;
-  private readonly loginTextLocator!: Locator;
-
-  private readonly loginSuccessfullyMessageLocator!: Locator;
-  private readonly accountLoginErrorMessageLocator!: Locator;
-  private readonly passwordLoginErrorMessageLocator!: Locator;
-  private readonly globalLoginErrorMesageLocator!: Locator;
+  private readonly accountErrorMessageLocator!: Locator;
+  private readonly passwordErrorMessageLocator!: Locator;
+  private readonly errorAlertLocator!: Locator;
 
   constructor(page: Page, locale: TLocale) {
     super(page);
@@ -31,17 +31,13 @@ export class SignInPage extends GlobalPage {
     this.signInCtaBtnLocator = this.page.locator(
       `//button[@type='submit'][normalize-space()='${this.LANG.SIGN_IN_CTA_BTN}']`
     );
-    this.loginTextLocator = this.page.locator(`//h1[text()='Đăng nhập']`);
-    this.loginSuccessfullyMessageLocator = this.page.getByRole("heading", {
-      name: "Đăng nhập thành công",
-    });
-    this.accountLoginErrorMessageLocator = this.page.locator(
+    this.accountErrorMessageLocator = this.page.locator(
       "#taiKhoan-helper-text"
     );
-    this.passwordLoginErrorMessageLocator = this.page.locator(
+    this.passwordErrorMessageLocator = this.page.locator(
       "#matKhau-helper-text"
     );
-    this.globalLoginErrorMesageLocator = this.page.locator(
+    this.errorAlertLocator = this.page.locator(
       "div[role='alert'] div.MuiAlert-message"
     );
   }
@@ -146,55 +142,76 @@ export class SignInPage extends GlobalPage {
     }
   }
 
-  // async getLoginSuccessfullyMessage(): Promise<string> {
-  //   try {
-  //     const msg = await this.getText(this.loginSuccessfullyMessageLocator);
-  //     return !msg ? "" : msg;
-  //   } catch (err) {
-  //     console.log({
-  //       context: "SignInPage.getLoginSuccessfullyMessage",
-  //       errorMessage: (err as Error)?.message ?? "",
-  //     });
-  //     return "";
-  //   }
-  // }
+  async getAccountErrorMessage(): Promise<
+    IBaseOutput<IFieldValidationMessage>
+  > {
+    try {
+      const textData = await this.getText(this.accountErrorMessageLocator);
+      return {
+        data: {
+          message: textData.data || "",
+        },
+      };
+    } catch (err) {
+      const errorMessage = (err as Error)?.message;
 
-  // async getAccountLoginErrorMessage(): Promise<string> {
-  //   try {
-  //     const msg = await this.getText(this.accountLoginErrorMessageLocator);
-  //     return !msg ? "" : msg;
-  //   } catch (err) {
-  //     console.log({
-  //       context: "SignInPage.getAccountLoginErrorMessage",
-  //       errorMessage: (err as Error)?.message ?? "",
-  //     });
-  //     return "";
-  //   }
-  // }
+      console.log({
+        context: "SignIngetAccountLoginErrorMessage",
+        errorMessage: (err as Error)?.message ?? "",
+      });
 
-  // async getPasswordLoginErrorMessage(): Promise<string> {
-  //   try {
-  //     const msg = await this.getText(this.passwordLoginErrorMessageLocator);
-  //     return !msg ? "" : msg;
-  //   } catch (err) {
-  //     console.log({
-  //       context: "SignInPage.getPasswrodLoginErrorMessage",
-  //       errorMessage: (err as Error)?.message ?? "",
-  //     });
-  //     return "";
-  //   }
-  // }
+      return {
+        errorMessage,
+        data: null,
+      };
+    }
+  }
 
-  // async getglobalLoginErrorMessage(): Promise<string> {
-  //   try {
-  //     const msg = await this.getText(this.globalLoginErrorMesageLocator);
-  //     return !msg ? "" : msg;
-  //   } catch (err) {
-  //     console.log({
-  //       context: "SignInPage.getGlobalLoginErrorMessage",
-  //       errorMessage: (err as Error)?.message ?? "",
-  //     });
-  //     return "";
-  //   }
-  // }
+  async getPasswordErrorMessage(): Promise<
+    IBaseOutput<IFieldValidationMessage>
+  > {
+    try {
+      const textData = await this.getText(this.passwordErrorMessageLocator);
+      return {
+        data: {
+          message: textData.data || "",
+        },
+      };
+    } catch (err) {
+      const errorMessage = (err as Error)?.message;
+
+      console.log({
+        context: "SignInPage.getPasswordErrorMessage",
+        errorMessage: (err as Error)?.message ?? "",
+      });
+
+      return {
+        errorMessage,
+        data: null,
+      };
+    }
+  }
+
+  async getErrorAlertMessage(): Promise<IBaseOutput<IFieldValidationMessage>> {
+    try {
+      const textData = await this.getText(this.errorAlertLocator);
+      return {
+        data: {
+          message: textData.data || "",
+        },
+      };
+    } catch (err) {
+      const errorMessage = (err as Error)?.message;
+
+      console.log({
+        context: "SignInPage.getErrorAlertMessage",
+        errorMessage: (err as Error)?.message ?? "",
+      });
+
+      return {
+        errorMessage,
+        data: null,
+      };
+    }
+  }
 }

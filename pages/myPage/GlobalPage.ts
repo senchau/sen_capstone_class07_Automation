@@ -68,6 +68,32 @@ export class GlobalPage {
     }
   }
 
+  async getText(
+    locator: Locator,
+    timeout = 10000
+  ): Promise<IBaseOutput<string>> {
+    try {
+      await locator.waitFor({ state: "visible", timeout });
+      const text = await locator.textContent();
+
+      return {
+        data: text,
+      };
+    } catch (err) {
+      const errorMessage = (err as Error)?.message;
+
+      console.log({
+        context: "GlobalPage.getText",
+        errorMessage,
+      });
+
+      return {
+        errorMessage,
+        data: null,
+      };
+    }
+  }
+
   async getOptions(
     selectLocator: Locator
   ): Promise<IBaseOutput<IGetOptionsResp>> {
