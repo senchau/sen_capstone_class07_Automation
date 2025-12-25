@@ -3,8 +3,6 @@ import userMockData from "../data/user.json";
 import { UserModel } from "../src/models/User";
 import { TUserType } from "../src/types/user";
 
-export { expect } from "@playwright/test";
-
 export const test = base.extend<{
   mockUser: UserModel;
 }>({
@@ -21,3 +19,5 @@ export const test = base.extend<{
     await use(userTest);
   },
 });
+
+export const expect = test.expect;

@@ -1,6 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { test, expect } from "../../fixtures/user";
-import { SignInPage } from "../../pages/myPage/SignInPage";
+import { test, expect } from "../../fixtures/auth";
 import { HomePage } from "../../pages/myPage/HomePage";
 import { MovieDetailPage } from "../../pages/myPage/MovieDetailPage";
 import { BookingPage } from "../../pages/myPage/BookingPage";
@@ -9,21 +8,10 @@ import { LANGUAGE } from "../../src/constants/language";
 
 test("Hiển thị thông báo người dùng đã mua vé thành công", async ({
   page,
-  context,
-  mockUser,
+  signIn
 }) => {
   const locale: TLocale = "VI";
   const LANG = LANGUAGE[locale];
-
-  await context.clearCookies();
-
-  const signInPage = await SignInPage.go(page, { locale });
-
-  const { data: signInData } = await signInPage.signIn(
-    mockUser.username,
-    mockUser.password
-  );
-  expect(signInData?.isSuccess, "Đăng nhập không thành công").toEqual(true);
 
   const homePage = await HomePage.go(page, { locale });
   expect(homePage.movieTotal, "Không lấy được danh sách phim").not.toEqual(0);
