@@ -1,11 +1,11 @@
-import { test as userFixture } from "./user";
+import { test as userFixtureTest } from "./user";
 import { TLocale } from "../src/types/locale";
 import { LANGUAGE } from "../src/constants/language";
 import { UserModel } from "../src/models/User";
 import { SignInPage } from "../pages/auth/SignInPage";
 import { SignUpPage } from "../pages/auth/SignUpPage";
 
-export const test = userFixture.extend<{
+export const test = userFixtureTest.extend<{
   signIn: void;
   signUpRandomUser: UserModel;
 }>({
@@ -15,10 +15,10 @@ export const test = userFixture.extend<{
 
     const signInPage = await SignInPage.go(page, { locale });
 
-    const { data: signInData } = await signInPage.signIn(
-      mockUser.username,
-      mockUser.password
-    );
+    const { data: signInData } = await signInPage.signIn({
+      username: mockUser.username,
+      password: mockUser.password,
+    });
     expect(signInData?.isSuccess, "Đăng nhập không thành công").toEqual(true);
 
     await use();

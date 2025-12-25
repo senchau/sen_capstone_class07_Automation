@@ -12,7 +12,7 @@ export interface ISeatResp {
   daDat: boolean;
 }
 
-export interface IGetSeatListQuery {
+export interface IGetSeatListReq {
   isBooked?: boolean;
 }
 
@@ -21,6 +21,6 @@ export interface IGetSeatListResp {
   total: number;
 }
 
-export interface ISelectSeatByOrderResponse {
+export interface ISelectSeatByOrderResp {
   locator: Locator;
 }

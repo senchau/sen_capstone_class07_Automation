@@ -1,6 +1,6 @@
 import { Page, Locator } from "@playwright/test";
 import { TLocale } from "../../src/types/locale";
-import { IBaseOutput } from "../../src/interfaces/commons";
+import { IBaseResp } from "../../src/interfaces/commons";
 import { IAccountResp } from "../../src/interfaces/headers";
 import { LANGUAGE } from "../../src/constants/language";
 import { formatError, prettyErrorLog } from "../../helpers/utils";
@@ -41,7 +41,7 @@ export class Header {
     }
   }
 
-  public async getAccountInfo(): Promise<IBaseOutput<IAccountResp>> {
+  public async getAccountInfo(): Promise<IBaseResp<IAccountResp>> {
     try {
       await this.accountLocator.waitFor({ state: "visible" });
       const text = await this.accountLocator.textContent();

@@ -1,12 +1,12 @@
 import { Page, Locator } from "@playwright/test";
 import { BasePage } from "../base/BasePage";
 import { Modal } from "../components/Modal";
-import { IBaseOutput, IGoInput } from "../../src/interfaces/commons";
+import { IBaseResp, IGoReq } from "../../src/interfaces/commons";
 import {
-  IGetSeatListQuery,
+  IGetSeatListReq,
   IGetSeatListResp,
   ISeatResp,
-  ISelectSeatByOrderResponse,
+  ISelectSeatByOrderResp,
 } from "../../src/interfaces/bookings";
 import { TLocale } from "../../src/types/locale";
 import { HOME_PAGE_DOMAIN, SEAT_LIST_API } from "../../src/constants/endpoint";
@@ -38,7 +38,7 @@ export class BookingPage extends BasePage {
     );
   }
 
-  public static async go(page: Page, input: IGoInput): Promise<BookingPage> {
+  public static async go(page: Page, input: IGoReq): Promise<BookingPage> {
     if (!BookingPage.instance) {
       BookingPage.instance = new BookingPage(
         page,
@@ -76,8 +76,8 @@ export class BookingPage extends BasePage {
   }
 
   async getSeatList(
-    query?: IGetSeatListQuery
-  ): Promise<IBaseOutput<IGetSeatListResp>> {
+    query?: IGetSeatListReq
+  ): Promise<IBaseResp<IGetSeatListResp>> {
     let seats: SeatModel[] = [];
     let total = 0;
 
@@ -128,7 +128,7 @@ export class BookingPage extends BasePage {
     }
   }
 
-  getAvailableSeatList(): IBaseOutput<IGetSeatListResp> {
+  getAvailableSeatList(): IBaseResp<IGetSeatListResp> {
     try {
       const availableSeats = this.seatModels.filter(
         (sealModel) => !sealModel.isBooked
@@ -153,7 +153,7 @@ export class BookingPage extends BasePage {
 
   async selectSeatByOrder(
     order: number
-  ): Promise<IBaseOutput<ISelectSeatByOrderResponse>> {
+  ): Promise<IBaseResp<ISelectSeatByOrderResp>> {
     try {
       const seatLocator = this.seatsLocator.locator(`//span[.='${order}']`);
 
@@ -175,7 +175,7 @@ export class BookingPage extends BasePage {
     }
   }
 
-  async bookTicketByOrder(order: number): Promise<IBaseOutput<null>> {
+  async bookTicketByOrder(order: number): Promise<IBaseResp<null>> {
     try {
       const { data, errorMessage } = await this.selectSeatByOrder(order);
 
@@ -199,7 +199,7 @@ export class BookingPage extends BasePage {
     }
   }
 
-  async bookTicket(): Promise<IBaseOutput<null>> {
+  async bookTicket(): Promise<IBaseResp<null>> {
     try {
       await this.click(this.buyTicketBtnLocator);
 

@@ -2,7 +2,7 @@ import { Page, Locator } from "@playwright/test";
 import { BasePage } from "../base/BasePage";
 import { Header } from "../components/Header";
 import { Modal } from "../components/Modal";
-import { IBaseOutput, IGoInput } from "../../src/interfaces/commons";
+import { IBaseResp, IGoReq } from "../../src/interfaces/commons";
 import {
   IGetMovieListResp,
   IMovieResp,
@@ -62,7 +62,7 @@ export class HomePage extends BasePage {
       );
   }
 
-  public static async go(page: Page, input: IGoInput): Promise<HomePage> {
+  public static async go(page: Page, input: IGoReq): Promise<HomePage> {
     if (!HomePage.instance) {
       HomePage.instance = new HomePage(page, input.locale);
     }
@@ -93,7 +93,7 @@ export class HomePage extends BasePage {
     }
   }
 
-  async getMovieList(): Promise<IBaseOutput<IGetMovieListResp>> {
+  async getMovieList(): Promise<IBaseResp<IGetMovieListResp>> {
     try {
       let movies: MovieModel[] = [];
       let total = 0;
@@ -136,7 +136,7 @@ export class HomePage extends BasePage {
   }
 
   async getMovieListFromFilter(): Promise<
-    IBaseOutput<IGetMovieListFromFilterResp>
+    IBaseResp<IGetMovieListFromFilterResp>
   > {
     try {
       const { data, errorMessage } = await this.getOptions(
@@ -168,7 +168,7 @@ export class HomePage extends BasePage {
   }
 
   async getCinemaListFromFilter(): Promise<
-    IBaseOutput<IGetCinemaListFromFilterResp>
+    IBaseResp<IGetCinemaListFromFilterResp>
   > {
     try {
       const { data, errorMessage } = await this.getOptions(
@@ -201,7 +201,7 @@ export class HomePage extends BasePage {
 
   async getMovieDetailFromCarousel(
     slideNumber: number = 1
-  ): Promise<IBaseOutput<IGetMovieDetailFromMovieCardResp>> {
+  ): Promise<IBaseResp<IGetMovieDetailFromMovieCardResp>> {
     try {
       let movies: IGetMovieDetailFromMovieCardMovieResp[] = [];
       const movieCarouselBtnLocator = this.movieCarouselBtnLocator(slideNumber);
@@ -275,7 +275,7 @@ export class HomePage extends BasePage {
   }
 
   async getShowtimeListFromFilter(): Promise<
-    IBaseOutput<IGetShowtimeListFromFilterResp>
+    IBaseResp<IGetShowtimeListFromFilterResp>
   > {
     try {
       const { data, errorMessage } = await this.getOptions(

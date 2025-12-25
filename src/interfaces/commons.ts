@@ -1,12 +1,12 @@
 import { Locator } from "@playwright/test";
 import { TLocale } from "../types/locale";
 
-export interface IGoInput {
+export interface IGoReq {
   id?: string;
   locale: TLocale;
 }
 
-export interface IBaseOutput<T> {
+export interface IBaseResp<T> {
   data: T | null;
   errorMessage?: string;
 }

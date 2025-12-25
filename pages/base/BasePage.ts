@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import {
-  IBaseOutput,
+  IBaseResp,
   IGetOptionsResp,
   IGetOptionsOptionsResp,
 } from "../../src/interfaces/commons";
@@ -21,7 +21,7 @@ export class BasePage {
     locator: Locator,
     value: string,
     timeout = 10000
-  ): Promise<IBaseOutput<void>> {
+  ): Promise<IBaseResp<void>> {
     try {
       await locator.waitFor({ state: "attached", timeout });
       await locator.fill(value);
@@ -40,7 +40,7 @@ export class BasePage {
     }
   }
 
-  async click(locator: Locator, timeout = 10000): Promise<IBaseOutput<void>> {
+  async click(locator: Locator, timeout = 10000): Promise<IBaseResp<void>> {
     try {
       await locator.waitFor({ state: "attached", timeout });
 
@@ -65,7 +65,7 @@ export class BasePage {
   async getText(
     locator: Locator,
     timeout = 10000
-  ): Promise<IBaseOutput<string>> {
+  ): Promise<IBaseResp<string>> {
     try {
       await locator.waitFor({ state: "visible", timeout });
       const text = await locator.textContent();
@@ -86,7 +86,7 @@ export class BasePage {
 
   async getOptions(
     selectLocator: Locator
-  ): Promise<IBaseOutput<IGetOptionsResp>> {
+  ): Promise<IBaseResp<IGetOptionsResp>> {
     try {
       await this.click(selectLocator);
       const optionLocator = await selectLocator.locator("//option");

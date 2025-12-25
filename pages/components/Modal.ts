@@ -1,7 +1,7 @@
 import { Page, Locator } from "@playwright/test";
 import { TLocale } from "../../src/types/locale";
 import { LANGUAGE } from "../../src/constants/language";
-import { IBaseOutput, IGetModalDataResp } from "../../src/interfaces/commons";
+import { IBaseResp, IGetModalDataResp } from "../../src/interfaces/commons";
 import { formatError, prettyErrorLog } from "../../helpers/utils";
 
 export class Modal {
@@ -19,7 +19,7 @@ export class Modal {
     );
   }
 
-  async getModalData(): Promise<IBaseOutput<IGetModalDataResp>> {
+  async getModalData(): Promise<IBaseResp<IGetModalDataResp>> {
     try {
       await this.modalLocator.waitFor({ state: "visible" });
 

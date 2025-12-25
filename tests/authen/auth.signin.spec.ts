@@ -12,10 +12,12 @@ test("Đăng nhập thành công với tài khoản vừa được đăng ký th
 
   const signInPage = await SignInPage.go(page, { locale });
 
-  await signInPage.signIn(signUpRandomUser.username, signUpRandomUser.password);
+  await signInPage.signIn({
+    username: signUpRandomUser.username,
+    password: signUpRandomUser.password,
+  });
 
-  const { data: signInModalData } =
-    await signInPage.modal.getModalData();
+  const { data: signInModalData } = await signInPage.modal.getModalData();
 
   expect(
     signInModalData?.title,

@@ -1,8 +1,9 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "../base/BasePage";
 import { Modal } from "../components/Modal";
-import { IBaseOutput, IGoInput } from "../../src/interfaces/commons";
+import { IBaseResp, IGoReq } from "../../src/interfaces/commons";
 import {
+  ISignInReq,
   ISignInResp,
   IFieldValidationMessage,
 } from "../../src/interfaces/auths";
@@ -43,7 +44,7 @@ export class SignInPage extends BasePage {
     );
   }
 
-  public static async go(page: Page, input: IGoInput): Promise<SignInPage> {
+  public static async go(page: Page, input: IGoReq): Promise<SignInPage> {
     if (!SignInPage.instance) {
       SignInPage.instance = new SignInPage(page, input.locale);
     }
@@ -67,7 +68,7 @@ export class SignInPage extends BasePage {
     }
   }
 
-  private async fillAccount(value: string): Promise<IBaseOutput<void>> {
+  private async fillAccount(value: string): Promise<IBaseResp<void>> {
     try {
       return await this.fill(this.accountLocator, value);
     } catch (err) {
@@ -81,7 +82,7 @@ export class SignInPage extends BasePage {
     }
   }
 
-  private async fillPassword(value: string): Promise<IBaseOutput<void>> {
+  private async fillPassword(value: string): Promise<IBaseResp<void>> {
     try {
       return await this.fill(this.passwordLocator, value);
     } catch (err) {
@@ -95,10 +96,10 @@ export class SignInPage extends BasePage {
     }
   }
 
-  async signIn(
-    username: string,
-    password: string
-  ): Promise<IBaseOutput<ISignInResp>> {
+  async signIn({
+    username,
+    password,
+  }: ISignInReq): Promise<IBaseResp<ISignInResp>> {
     try {
       await this.fillAccount(username);
       await this.fillPassword(password);
@@ -127,7 +128,7 @@ export class SignInPage extends BasePage {
   }
 
   async getAccountErrorMessage(): Promise<
-    IBaseOutput<IFieldValidationMessage>
+    IBaseResp<IFieldValidationMessage>
   > {
     try {
       const textData = await this.getText(this.accountErrorMessageLocator);
@@ -148,7 +149,7 @@ export class SignInPage extends BasePage {
   }
 
   async getPasswordErrorMessage(): Promise<
-    IBaseOutput<IFieldValidationMessage>
+    IBaseResp<IFieldValidationMessage>
   > {
     try {
       const textData = await this.getText(this.passwordErrorMessageLocator);
@@ -168,7 +169,7 @@ export class SignInPage extends BasePage {
     }
   }
 
-  async getErrorAlertMessage(): Promise<IBaseOutput<IFieldValidationMessage>> {
+  async getErrorAlertMessage(): Promise<IBaseResp<IFieldValidationMessage>> {
     try {
       const textData = await this.getText(this.errorAlertLocator);
       return {

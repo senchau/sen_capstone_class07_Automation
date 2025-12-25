@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test";
-import { IBaseOutput, IGoInput } from "../../src/interfaces/commons";
+import { IBaseResp, IGoReq } from "../../src/interfaces/commons";
 import {
   IGetMovieDetailResp,
   IMovieDetailResp,
@@ -31,7 +31,7 @@ export class MovieDetailPage {
 
   public static async go(
     page: Page,
-    input: IGoInput
+    input: IGoReq
   ): Promise<MovieDetailPage> {
     if (!MovieDetailPage.instance) {
       MovieDetailPage.instance = new MovieDetailPage(
@@ -66,7 +66,7 @@ export class MovieDetailPage {
     }
   }
 
-  async getMovieDetail(): Promise<IBaseOutput<IGetMovieDetailResp>> {
+  async getMovieDetail(): Promise<IBaseResp<IGetMovieDetailResp>> {
     try {
       const endpoint = MOVIE_DETAIL_API + `?MaPhim=${this.movieId}`;
       const response = await this.page.waitForResponse(

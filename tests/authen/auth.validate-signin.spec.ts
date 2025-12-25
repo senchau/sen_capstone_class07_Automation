@@ -14,7 +14,10 @@ test("Hiển thị lỗi tài khoản và mật khẩu bắt buộc phải đi�
 
   const signInPage = await SignInPage.go(page, { locale });
 
-  await signInPage.signIn("", "");
+  await signInPage.signIn({
+    username: "",
+    password: "",
+  });
 
   const { data: accountErrorMessage } =
     await signInPage.getAccountErrorMessage();
@@ -40,7 +43,7 @@ test("Hiển thị lỗi mật khẩu không hợp lệ", async ({ page, context
 
   const signInPage = await SignInPage.go(page, { locale });
 
-  await signInPage.signIn("user4", "Pass");
+  await signInPage.signIn({ username: "user4", password: "Pass" });
 
   const { data: passwordErrorMessage } =
     await signInPage.getPasswordErrorMessage();
@@ -62,10 +65,9 @@ test("Hiển thị lỗi khi đăng nhập với thông tin tài khoản sai", a
 
   const signInPage = await SignInPage.go(page, { locale });
 
-  await signInPage.signIn("user6", "Pass@123");
+  await signInPage.signIn({ username: "user6", password: "Pass@123" });
 
-  const { data: errorAlertMessage } =
-    await signInPage.getErrorAlertMessage();
+  const { data: errorAlertMessage } = await signInPage.getErrorAlertMessage();
 
   expect(
     errorAlertMessage?.message,

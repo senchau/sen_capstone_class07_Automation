@@ -30,10 +30,10 @@ test("Hiển thị thông báo người dùng đã mua vé thành công khi mua 
     lastName: userMockData.lastName,
   });
 
-  const { data: signInData } = await signInPage.signIn(
-    userTest.username,
-    userTest.password
-  );
+  const { data: signInData } = await signInPage.signIn({
+    username: userTest.username,
+    password: userTest.password,
+  });
   expect(signInData?.isSuccess, "Đăng nhập không thành công").toEqual(true);
 
   const homePage = await HomePage.go(page, { locale });
