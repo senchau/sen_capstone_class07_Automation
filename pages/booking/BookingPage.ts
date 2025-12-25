@@ -1,5 +1,6 @@
 import { Page, Locator } from "@playwright/test";
 import { BasePage } from "../base/BasePage";
+import { Modal } from "../components/Modal";
 import { IBaseOutput, IGoInput } from "../../src/interfaces/commons";
 import {
   IGetSeatListQuery,
@@ -8,14 +9,14 @@ import {
   ISelectSeatByOrderResponse,
 } from "../../src/interfaces/bookings";
 import { TLocale } from "../../src/types/locale";
-import { LANGUAGE } from "../../src/constants/language";
 import { HOME_PAGE_DOMAIN, SEAT_LIST_API } from "../../src/constants/endpoint";
 import { SeatModel } from "../../src/models/Seat";
-import { normalizeUrl } from "../../helpers/utils";
+import { formatError, prettyErrorLog, normalizeUrl } from "../../helpers/utils";
 
 export class BookingPage extends BasePage {
   private static instance: BookingPage;
-  private readonly LANG: Record<string, string>;
+
+  public readonly modal: Modal;
 
   private readonly seatsLocator!: Locator;
   private readonly buyTicketBtnLocator!: Locator;
@@ -25,10 +26,11 @@ export class BookingPage extends BasePage {
   public seatTotal: number = 0;
 
   constructor(page: Page, showtimeId: string, locale: TLocale) {
-    super(page);
+    super(page, locale);
+
+    this.modal = new Modal(page, locale);
 
     this.showtimeId = showtimeId;
-    this.LANG = LANGUAGE[locale];
 
     this.seatsLocator = this.page.locator("//button[@tabindex]");
     this.buyTicketBtnLocator = this.page.locator(
@@ -66,12 +68,8 @@ export class BookingPage extends BasePage {
 
       return self;
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "BookingPage.go",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return self;
     }
@@ -120,15 +118,11 @@ export class BookingPage extends BasePage {
         },
       };
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "BookingPage.getSeatList",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -147,15 +141,11 @@ export class BookingPage extends BasePage {
         },
       };
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "BookingPage.getAvailableSeatList",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -175,15 +165,11 @@ export class BookingPage extends BasePage {
         },
       };
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "BookingPage.selectSeatByOrder",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -203,15 +189,11 @@ export class BookingPage extends BasePage {
         data: null,
       };
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "BookingPage.bookTicketByOrder",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -225,15 +207,11 @@ export class BookingPage extends BasePage {
         data: null,
       };
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "BookingPage.bookTicket",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }

@@ -14,10 +14,11 @@ test("Đăng nhập thành công với tài khoản vừa được đăng ký th
 
   await signInPage.signIn(signUpRandomUser.username, signUpRandomUser.password);
 
-  const { data: signInModalContentData } = await signInPage.getModalContent();
+  const { data: signInModalData } =
+    await signInPage.modal.getModalData();
 
   expect(
-    signInModalContentData?.title,
+    signInModalData?.title,
     "Người dùng vừa đăng ký đăng nhập không thành công"
   ).toEqual(LANG.SIGN_IN_SUCCESSFULLY_MESSAGE);
 });

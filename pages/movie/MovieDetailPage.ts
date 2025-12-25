@@ -13,7 +13,7 @@ import {
 import { MovieModel } from "../../src/models/Movie";
 import { CinemaModel, CinemaClusterModel } from "../../src/models/Cinema";
 import { ShowtimeModel } from "../../src/models/Showtime";
-import { normalizeUrl } from "../../helpers/utils";
+import { formatError, prettyErrorLog, normalizeUrl } from "../../helpers/utils";
 
 export class MovieDetailPage {
   private static instance: MovieDetailPage;
@@ -59,12 +59,8 @@ export class MovieDetailPage {
 
       return self;
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "MovieDetailPage.go",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return self;
     }
@@ -134,15 +130,11 @@ export class MovieDetailPage {
         },
       };
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "MovieDetailPage.getMovieDetail",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }

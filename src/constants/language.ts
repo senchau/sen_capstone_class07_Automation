@@ -13,6 +13,9 @@ export const LANGUAGE: Record<TLocale, Record<string, string>> = {
     GLOBAL_LOGIN_ERROR_MESSAGE: "Tài khoản hoặc mật khẩu không đúng!",
     LOGOUT_SUCCESSFULLY_MESSAGE: "Đã đăng xuất",
 
+    HEADER_SIGN_OUT_CTA_BTN: "Đăng xuất",
+    HEADER_SIGN_OUT_SUCCESSFULLY_MESSAGE: "Đã đăng xuất",
+
     SIGN_UP_CTA_BTN: "Đăng ký",
     SIGN_UP_SUCCESSFULLY_MESSAGE: "Đăng ký thành công",
 

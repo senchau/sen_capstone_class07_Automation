@@ -1,5 +1,7 @@
 import { Page, Locator } from "@playwright/test";
 import { BasePage } from "../base/BasePage";
+import { Header } from "../components/Header";
+import { Modal } from "../components/Modal";
 import { IBaseOutput, IGoInput } from "../../src/interfaces/commons";
 import {
   IGetMovieListResp,
@@ -14,11 +16,10 @@ import { TLocale } from "../../src/types/locale";
 import { LANGUAGE } from "../../src/constants/language";
 import { HOME_PAGE_DOMAIN, MOVIE_LIST_API } from "../../src/constants/endpoint";
 import { MovieModel } from "../../src/models/Movie";
-import { normalizeUrl } from "../../helpers/utils";
+import { formatError, prettyErrorLog, normalizeUrl } from "../../helpers/utils";
 
 export class HomePage extends BasePage {
   private static instance: HomePage;
-  protected readonly page: Page;
   private readonly lang: Record<string, string>;
 
   private readonly movieFilterLocator!: Locator;
@@ -26,16 +27,25 @@ export class HomePage extends BasePage {
   private readonly showtimeFilterLocator!: Locator;
   private readonly buyTicketFilterBtnLocator!: Locator;
   private readonly movieCarouselItemLocator!: Locator;
+
   private readonly movieCarouselBtnLocator!: (slideNumber: number) => Locator;
+
+  protected readonly page: Page;
+
+  public readonly header: Header;
+  public readonly modal: Modal;
 
   public movieModels: MovieModel[] = [];
   public movieTotal: number = 0;
 
   private constructor(page: Page, locale: TLocale) {
-    super(page);
+    super(page, locale);
 
     this.page = page;
     this.lang = LANGUAGE[locale];
+
+    this.header = new Header(page, locale);
+    this.modal = new Modal(page, locale);
 
     this.movieFilterLocator = this.page.locator("//select[@name='film']");
     this.cinemaFilterLocator = this.page.locator("//select[@name='cinema']");
@@ -76,12 +86,8 @@ export class HomePage extends BasePage {
 
       return self;
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "HomePage.go",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return self;
     }
@@ -119,15 +125,11 @@ export class HomePage extends BasePage {
         data: { movies, total },
       };
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "HomePage.getMovieList",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -155,15 +157,11 @@ export class HomePage extends BasePage {
         },
       };
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "HomePage.getMovieListFromFilter",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -191,15 +189,11 @@ export class HomePage extends BasePage {
         },
       };
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "HomePage.getCinemaListFromFilter",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -270,15 +264,11 @@ export class HomePage extends BasePage {
         },
       };
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "HomePage.getMovieDetailFromCarousel",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -305,15 +295,11 @@ export class HomePage extends BasePage {
         },
       };
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "HomePage.getShowtimeListFromFilter",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -323,15 +309,11 @@ export class HomePage extends BasePage {
     try {
       await this.movieFilterLocator.selectOption(movieId);
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "HomePage.selectMovieOptionById",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -341,15 +323,11 @@ export class HomePage extends BasePage {
     try {
       await this.cinemaFilterLocator.selectOption(cinemaId);
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "HomePage.selectCinemaOptionById",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -359,15 +337,11 @@ export class HomePage extends BasePage {
     try {
       await this.showtimeFilterLocator.selectOption(cinemaId);
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "HomePage.selectShowtimeOptionById",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -377,15 +351,11 @@ export class HomePage extends BasePage {
     try {
       await this.click(this.buyTicketFilterBtnLocator);
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "HomePage.buyTicketFromFilter",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }

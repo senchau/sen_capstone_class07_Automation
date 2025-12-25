@@ -1,18 +1,19 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "../base/BasePage";
+import { Modal } from "../components/Modal";
 import { IBaseOutput, IGoInput } from "../../src/interfaces/commons";
 import {
   ISignInResp,
   IFieldValidationMessage,
 } from "../../src/interfaces/auths";
 import { TLocale } from "../../src/types/locale";
-import { LANGUAGE } from "../../src/constants/language";
 import { SIGN_IN_PAGE_DOMAIN } from "../../src/constants/endpoint";
-import { normalizeUrl } from "../../helpers/utils";
+import { formatError, prettyErrorLog, normalizeUrl } from "../../helpers/utils";
 
 export class SignInPage extends BasePage {
   private static instance: SignInPage;
-  private readonly LANG: Record<string, string>;
+
+  public readonly modal: Modal;
 
   private readonly accountLocator!: Locator;
   private readonly passwordLocator!: Locator;
@@ -22,9 +23,9 @@ export class SignInPage extends BasePage {
   private readonly errorAlertLocator!: Locator;
 
   constructor(page: Page, locale: TLocale) {
-    super(page);
+    super(page, locale);
 
-    this.LANG = LANGUAGE[locale];
+    this.modal = new Modal(page, locale);
 
     this.accountLocator = this.page.locator("#taiKhoan");
     this.passwordLocator = this.page.locator("#matKhau");
@@ -59,12 +60,8 @@ export class SignInPage extends BasePage {
 
       return self;
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "SignInPage.go",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return self;
     }
@@ -74,15 +71,11 @@ export class SignInPage extends BasePage {
     try {
       return await this.fill(this.accountLocator, value);
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "SignInPage.fillAccount",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -92,15 +85,11 @@ export class SignInPage extends BasePage {
     try {
       return await this.fill(this.passwordLocator, value);
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "SignInPage.fillPassword",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -113,10 +102,11 @@ export class SignInPage extends BasePage {
     try {
       await this.fillAccount(username);
       await this.fillPassword(password);
+
       await this.click(this.signInCtaBtnLocator);
 
-      const content = await this.getModalContent();
-      if (content.data?.title !== this.LANG.SIGN_IN_SUCCESSFULLY_MESSAGE) {
+      const { data: modalData } = await this.modal.getModalData();
+      if (modalData?.title !== this.LANG.SIGN_IN_SUCCESSFULLY_MESSAGE) {
         throw new Error("Sign-in failed. Please try again");
       }
 
@@ -126,18 +116,12 @@ export class SignInPage extends BasePage {
         },
       };
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "SignInPage.signIn",
-        errorMessage: (err as Error)?.message ?? "",
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
-        data: {
-          isSuccess: false,
-        },
+        errorMessage: error.message,
+        data: null,
       };
     }
   }
@@ -153,15 +137,11 @@ export class SignInPage extends BasePage {
         },
       };
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "SignIngetAccountLoginErrorMessage",
-        errorMessage: (err as Error)?.message ?? "",
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -178,15 +158,11 @@ export class SignInPage extends BasePage {
         },
       };
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "SignInPage.getPasswordErrorMessage",
-        errorMessage: (err as Error)?.message ?? "",
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -201,15 +177,11 @@ export class SignInPage extends BasePage {
         },
       };
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "SignInPage.getErrorAlertMessage",
-        errorMessage: (err as Error)?.message ?? "",
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }

@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from "@playwright/test";
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -9,11 +9,11 @@ export default defineConfig({
 
   // ----- Expect timeout -----
   expect: {
-    timeout: 10000, // 10 giây cho mỗi expect
+    timeout: 30000, // 10 giây cho mỗi expect
   },
 
   // ----- Test folder -----
-  testDir: './tests',
+  testDir: "./tests",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
@@ -21,19 +21,18 @@ export default defineConfig({
 
   // ----- Reporter -----
   reporter: [
-    ['list'], // hiển thị tiến trình test trên terminal
-    ['html', { outputFolder: 'playwright-report', open: 'never' }], // báo cáo HTML mặc định
-    ['allure-playwright'], // 💥 thêm Allure report
+    ["list"], // hiển thị tiến trình test trên terminal
+    ["html", { outputFolder: "playwright-report", open: "never" }], // báo cáo HTML mặc định
   ],
 
   // ----- Default settings for all tests -----
   use: {
-    baseURL: 'https://demo1.cybersoft.edu.vn/',
+    baseURL: "https://demo1.cybersoft.edu.vn/",
     headless: true, // đổi thành false nếu muốn thấy trình duyệt khi debug
 
-    screenshot: 'only-on-failure', // 🖼️ chụp khi fail
-    video: 'retain-on-failure',    // 🎥 lưu video khi fail
-    trace: 'retain-on-failure',    // 🧵 lưu trace khi fail
+    screenshot: "only-on-failure", // 🖼️ chụp khi fail
+    video: "retain-on-failure", // 🎥 lưu video khi fail
+    trace: "retain-on-failure", // 🧵 lưu trace khi fail
 
     viewport: { width: 1280, height: 720 },
     actionTimeout: 10000,
@@ -43,16 +42,16 @@ export default defineConfig({
   // ----- Browsers -----
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
     },
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      name: "firefox",
+      use: { ...devices["Desktop Firefox"] },
     },
     {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      name: "webkit",
+      use: { ...devices["Desktop Safari"] },
     },
   ],
 

@@ -78,7 +78,7 @@ test("Hiển thị cảnh báo khi người dùng đặt vé mà chưa đăng nh
 
   await bookingPage.bookTicketByOrder(randomSeat.order);
 
-  const { data: modalContentData } = await bookingPage.getModalContent();
-  console.log(`Lỗi: ${modalContentData?.title}`);
-  expect(modalContentData?.title).toBe(LANG.BOOKING_UNAUTHENTICATED_MESSAGE);
+  const { data: modalData } = await bookingPage.modal.getModalData();
+  console.log(`Lỗi: ${modalData?.title}`);
+  expect(modalData?.title).toBe(LANG.BOOKING_UNAUTHENTICATED_MESSAGE);
 });

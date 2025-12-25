@@ -3,19 +3,18 @@ import {
   IBaseOutput,
   IGetOptionsResp,
   IGetOptionsOptionsResp,
-  IGetModalContentResp,
 } from "../../src/interfaces/commons";
+import { TLocale } from "../../src/types/locale";
+import { LANGUAGE } from "../../src/constants/language";
+import { formatError, prettyErrorLog } from "../../helpers/utils";
 
 export class BasePage {
   protected readonly page: Page;
+  protected readonly LANG: Record<string, string>;
 
-  private readonly modalLocator!: Locator;
-
-  constructor(page: Page) {
+  constructor(page: Page, locale: TLocale) {
     this.page = page;
-    this.modalLocator = this.page.locator(
-      '.swal2-popup.swal2-modal.swal2-show[role="dialog"]'
-    );
+    this.LANG = LANGUAGE[locale];
   }
 
   async fill(
@@ -31,15 +30,11 @@ export class BasePage {
         data: null,
       };
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "BasePage.fill",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -48,21 +43,20 @@ export class BasePage {
   async click(locator: Locator, timeout = 10000): Promise<IBaseOutput<void>> {
     try {
       await locator.waitFor({ state: "attached", timeout });
-      await locator.click();
+
+      if ((await locator.isVisible()) && (await locator.isEnabled())) {
+        await locator.click();
+      }
 
       return {
         data: null,
       };
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "BasePage.click",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -80,15 +74,11 @@ export class BasePage {
         data: text,
       };
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "BasePage.getText",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -120,48 +110,11 @@ export class BasePage {
         },
       };
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "BasePage.getOptions",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
-        data: null,
-      };
-    }
-  }
-
-  async getModalContent(): Promise<IBaseOutput<IGetModalContentResp>> {
-    try {
-      await this.modalLocator.waitFor({ state: "visible" });
-
-      const title = await this.modalLocator
-        .locator("h2#swal2-title")
-        .textContent();
-
-      const content = await this.modalLocator
-        .locator("div#swal2-content")
-        .textContent();
-
-      return {
-        data: {
-          title: title || "",
-          content: content || "",
-        },
-      };
-    } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "BasePage.getModalContent",
-        errorMessage,
-      });
-
-      return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }

@@ -76,7 +76,7 @@ test("Hiển thị thông báo người dùng đã mua vé thành công", async 
 
   await bookingPage.bookTicketByOrder(randomSeat.order);
 
-  const { data: modalContentData } = await bookingPage.getModalContent();
-  console.log(`${modalContentData?.title}`);
-  expect(modalContentData?.title).toBe(LANG.BOOKING_SUCCESSFULLY_MESSAGE);
+  const { data: modalData } = await bookingPage.modal.getModalData();
+  console.log(`${modalData?.title}`);
+  expect(modalData?.title).toBe(LANG.BOOKING_SUCCESSFULLY_MESSAGE);
 });

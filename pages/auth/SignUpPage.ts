@@ -1,17 +1,18 @@
 import { Locator, Page } from "@playwright/test";
 import { faker } from "@faker-js/faker";
 import { BasePage } from "../base/BasePage";
+import { Modal } from "../components/Modal";
 import { IBaseOutput, IGoInput } from "../../src/interfaces/commons";
 import { ISignUpRandomUserResp } from "../../src/interfaces/auths";
 import { TLocale } from "../../src/types/locale";
-import { LANGUAGE } from "../../src/constants/language";
 import { UserModel } from "../../src/models/User";
 import { SIGN_UP_PAGE_DOMAIN } from "../../src/constants/endpoint";
-import { normalizeUrl } from "../../helpers/utils";
+import { formatError, prettyErrorLog, normalizeUrl } from "../../helpers/utils";
 
 export class SignUpPage extends BasePage {
   private static instance: SignUpPage;
-  private readonly LANG: Record<string, string>;
+
+  public readonly modal: Modal;
 
   readonly accountLocator!: Locator;
   readonly passwordLocator!: Locator;
@@ -30,9 +31,9 @@ export class SignUpPage extends BasePage {
   readonly registerSuccessfullyMessageLocator!: Locator;
 
   constructor(page: Page, locale: TLocale) {
-    super(page);
+    super(page, locale);
 
-    this.LANG = LANGUAGE[locale];
+    this.modal = new Modal(page, locale);
 
     this.accountLocator = this.page.locator("#taiKhoan");
     this.passwordLocator = this.page.locator("#matKhau");
@@ -80,12 +81,8 @@ export class SignUpPage extends BasePage {
 
       return self;
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "SignUpPage.go",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return self;
     }
@@ -95,15 +92,11 @@ export class SignUpPage extends BasePage {
     try {
       return await this.fill(this.accountLocator, value);
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "SignUpPage.fillAccount",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -113,15 +106,11 @@ export class SignUpPage extends BasePage {
     try {
       return await this.fill(this.passwordLocator, value);
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "SignUpPage.fillPassword",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -131,15 +120,11 @@ export class SignUpPage extends BasePage {
     try {
       return await this.fill(this.confirmPasswordLocator, value);
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "SignUpPage.fillConfirmPassword",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -149,15 +134,11 @@ export class SignUpPage extends BasePage {
     try {
       return await this.fill(this.fullnameLocator, value);
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "SignUpPage.fillFullname",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -167,15 +148,11 @@ export class SignUpPage extends BasePage {
     try {
       return await this.fill(this.emailLocator, value);
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "SignUpPage.fillEmail",
-        errorMessage,
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }
@@ -212,15 +189,11 @@ export class SignUpPage extends BasePage {
         },
       };
     } catch (err) {
-      const errorMessage = (err as Error)?.message;
-
-      console.log({
-        context: "SignInPage.signUpRandomUser",
-        errorMessage: (err as Error)?.message ?? "",
-      });
+      const error = formatError(err);
+      prettyErrorLog(error);
 
       return {
-        errorMessage,
+        errorMessage: error.message,
         data: null,
       };
     }

@@ -21,7 +21,9 @@ export interface IGetOptionsResp {
   options: IGetOptionsOptionsResp[];
 }
 
-export interface IGetModalContentResp {
+export interface IGetModalDataResp {
   title: string;
   content: string;
+  ok: () => Promise<void>
+  cancel: () => Promise<void>
 }

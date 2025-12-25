@@ -33,11 +33,11 @@ export const test = userFixture.extend<{
 
     const { data: signUpRandomUserData } = await signUpPage.signUpRandomUser();
 
-    const { data: signUpModalContentData } = await signUpPage.getModalContent();
+    const { data: signUpModalData } = await signUpPage.modal.getModalData();
 
     if (!signUpRandomUserData) {
       expect(
-        signUpModalContentData?.title,
+        signUpModalData?.title,
         "Đăng ký người dùng không thành công"
       ).toEqual(LANG.SIGN_UP_SUCCESSFULLY_MESSAGE);
       return;
