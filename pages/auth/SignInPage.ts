@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { GlobalPage } from "./GlobalPage";
+import { BasePage } from "../base/BasePage";
 import { IBaseOutput, IGoInput } from "../../src/interfaces/commons";
 import {
   ISignInResp,
@@ -10,7 +10,7 @@ import { LANGUAGE } from "../../src/constants/language";
 import { SIGN_IN_PAGE_DOMAIN } from "../../src/constants/endpoint";
 import { normalizeUrl } from "../../helpers/utils";
 
-export class SignInPage extends GlobalPage {
+export class SignInPage extends BasePage {
   private static instance: SignInPage;
   private readonly LANG: Record<string, string>;
 

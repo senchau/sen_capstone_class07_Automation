@@ -2,8 +2,8 @@ import { test as userFixture } from "./user";
 import { TLocale } from "../src/types/locale";
 import { LANGUAGE } from "../src/constants/language";
 import { UserModel } from "../src/models/User";
-import { SignInPage } from "../pages/myPage/SignInPage";
-import { SignUpPage } from "../pages/myPage/SignUpPage";
+import { SignInPage } from "../pages/auth/SignInPage";
+import { SignUpPage } from "../pages/auth/SignUpPage";
 
 export const test = userFixture.extend<{
   signIn: void;

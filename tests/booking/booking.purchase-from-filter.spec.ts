@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { test, expect } from "../../fixtures/auth";
-import { HomePage } from "../../pages/myPage/HomePage";
-import { BookingPage } from "../../pages/myPage/BookingPage";
+import { HomePage } from "../../pages/home/HomePage";
+import { BookingPage } from "../../pages/booking/BookingPage";
 import { TLocale } from "../../src/types/locale";
 import { LANGUAGE } from "../../src/constants/language";
 

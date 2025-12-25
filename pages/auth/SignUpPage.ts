@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import { faker } from "@faker-js/faker";
-import { GlobalPage } from "./GlobalPage";
+import { BasePage } from "../base/BasePage";
 import { IBaseOutput, IGoInput } from "../../src/interfaces/commons";
 import { ISignUpRandomUserResp } from "../../src/interfaces/auths";
 import { TLocale } from "../../src/types/locale";
@@ -9,7 +9,7 @@ import { UserModel } from "../../src/models/User";
 import { SIGN_UP_PAGE_DOMAIN } from "../../src/constants/endpoint";
 import { normalizeUrl } from "../../helpers/utils";
 
-export class SignUpPage extends GlobalPage {
+export class SignUpPage extends BasePage {
   private static instance: SignUpPage;
   private readonly LANG: Record<string, string>;
 

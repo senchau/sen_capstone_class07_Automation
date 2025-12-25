@@ -1,5 +1,5 @@
 import test, { expect } from "@playwright/test";
-import { HomePage } from "../../pages/myPage/HomePage";
+import { HomePage } from "../../pages/home/HomePage";
 import { TLocale } from "../../src/types/locale";
 
 test("Hiển thị danh sách phim phải đúng với API trả về", async ({

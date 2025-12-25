@@ -6,7 +6,7 @@ import {
   IGetModalContentResp,
 } from "../../src/interfaces/commons";
 
-export class GlobalPage {
+export class BasePage {
   protected readonly page: Page;
 
   private readonly modalLocator!: Locator;
@@ -34,7 +34,7 @@ export class GlobalPage {
       const errorMessage = (err as Error)?.message;
 
       console.log({
-        context: "GlobalPage.fill",
+        context: "BasePage.fill",
         errorMessage,
       });
 
@@ -57,7 +57,7 @@ export class GlobalPage {
       const errorMessage = (err as Error)?.message;
 
       console.log({
-        context: "GlobalPage.click",
+        context: "BasePage.click",
         errorMessage,
       });
 
@@ -83,7 +83,7 @@ export class GlobalPage {
       const errorMessage = (err as Error)?.message;
 
       console.log({
-        context: "GlobalPage.getText",
+        context: "BasePage.getText",
         errorMessage,
       });
 
@@ -123,7 +123,7 @@ export class GlobalPage {
       const errorMessage = (err as Error)?.message;
 
       console.log({
-        context: "GlobalPage.getOptions",
+        context: "BasePage.getOptions",
         errorMessage,
       });
 
@@ -156,7 +156,7 @@ export class GlobalPage {
       const errorMessage = (err as Error)?.message;
 
       console.log({
-        context: "GlobalPage.getModalContent",
+        context: "BasePage.getModalContent",
         errorMessage,
       });
 

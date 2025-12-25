@@ -1,5 +1,5 @@
 import { Page, Locator } from "@playwright/test";
-import { GlobalPage } from "./GlobalPage";
+import { BasePage } from "../base/BasePage";
 import { IBaseOutput, IGoInput } from "../../src/interfaces/commons";
 import {
   IGetSeatListQuery,
@@ -13,7 +13,7 @@ import { HOME_PAGE_DOMAIN, SEAT_LIST_API } from "../../src/constants/endpoint";
 import { SeatModel } from "../../src/models/Seat";
 import { normalizeUrl } from "../../helpers/utils";
 
-export class BookingPage extends GlobalPage {
+export class BookingPage extends BasePage {
   private static instance: BookingPage;
   private readonly LANG: Record<string, string>;
 

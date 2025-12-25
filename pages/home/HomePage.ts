@@ -1,5 +1,5 @@
 import { Page, Locator } from "@playwright/test";
-import { GlobalPage } from "./GlobalPage";
+import { BasePage } from "../base/BasePage";
 import { IBaseOutput, IGoInput } from "../../src/interfaces/commons";
 import {
   IGetMovieListResp,
@@ -16,7 +16,7 @@ import { HOME_PAGE_DOMAIN, MOVIE_LIST_API } from "../../src/constants/endpoint";
 import { MovieModel } from "../../src/models/Movie";
 import { normalizeUrl } from "../../helpers/utils";
 
-export class HomePage extends GlobalPage {
+export class HomePage extends BasePage {
   private static instance: HomePage;
   protected readonly page: Page;
   private readonly lang: Record<string, string>;

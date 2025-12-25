@@ -1,5 +1,5 @@
 import { test, expect } from "../../fixtures/auth";
-import { SignInPage } from "../../pages/myPage/SignInPage";
+import { SignInPage } from "../../pages/auth/SignInPage";
 import { TLocale } from "../../src/types/locale";
 import { LANGUAGE } from "../../src/constants/language";
 

@@ -1,8 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { LoginPage } from "../../pages/authen/LoginPage";
-import { RegisterPage } from "../../pages/authen/RegisterPage";
-import { SignUpPage } from "../../pages/myPage/SignUpPage";
-import { SignInPage } from "../../pages/myPage/SignInPage";
+import { SignInPage } from "../../pages/auth/SignInPage";
 import { TLocale } from "../../src/types/locale";
 import { LANGUAGE } from "../../src/constants/language";
 
