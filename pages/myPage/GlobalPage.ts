@@ -1,20 +1,10 @@
 import { Locator, Page } from "@playwright/test";
-import { IBaseOutput } from "../../src/interfaces/commons";
-
-export interface IGetOptionsOptionsResp {
-  locator: Locator;
-  value: string;
-  label: string;
-}
-
-export interface IGetOptionsResp {
-  options: IGetOptionsOptionsResp[];
-}
-
-export interface IGetModalContentResp {
-  title: string;
-  content: string;
-}
+import {
+  IBaseOutput,
+  IGetOptionsResp,
+  IGetOptionsOptionsResp,
+  IGetModalContentResp,
+} from "../../src/interfaces/commons";
 
 export class GlobalPage {
   protected readonly page: Page;

@@ -1,56 +1,20 @@
 import { Page, Locator } from "@playwright/test";
-import { GlobalPage, IGetOptionsOptionsResp } from "./GlobalPage";
+import { GlobalPage } from "./GlobalPage";
 import { IBaseOutput, IGoInput } from "../../src/interfaces/commons";
+import {
+  IGetMovieListResp,
+  IMovieResp,
+  IGetMovieListFromFilterResp,
+  IGetCinemaListFromFilterResp,
+  IGetMovieDetailFromMovieCardResp,
+  IGetMovieDetailFromMovieCardMovieResp,
+  IGetShowtimeListFromFilterResp,
+} from "../../src/interfaces/homes";
 import { TLocale } from "../../src/types/locale";
 import { LANGUAGE } from "../../src/constants/language";
 import { HOME_PAGE_DOMAIN, MOVIE_LIST_API } from "../../src/constants/endpoint";
 import { MovieModel } from "../../src/models/Movie";
-import { CinemaModel } from "../../src/models/Cinema";
-import { ShowtimeModel } from "../../src/models/Showtime";
 import { normalizeUrl } from "../../helpers/utils";
-
-export interface IMovieResp {
-  maPhim: number;
-  tenPhim: string;
-  biDanh: string;
-  trailer: string;
-  hinhAnh: string;
-  moTa: string;
-  maNhom: string;
-  ngayKhoiChieu: string;
-  danhGia: number;
-}
-
-export interface IGetMovieListResp {
-  movies: MovieModel[];
-  total: number;
-}
-
-export interface IGetMovieListFromFilterResp {
-  movieFilters: IGetOptionsOptionsResp[];
-  total: number;
-}
-
-export interface IGetCinemaListFromFilterResp {
-  cinemaFilters: IGetOptionsOptionsResp[];
-  total: number;
-}
-
-export interface IGetShowtimeListFromFilterResp {
-  showtimeFilters: IGetOptionsOptionsResp[];
-  total: number;
-}
-
-export interface IGetMovieDetailFromMovieCardMovieResp {
-  id: string;
-  title: string;
-  description: string;
-  posterUrl: string;
-}
-
-export interface IGetMovieDetailFromMovieCardResp {
-  movies: IGetMovieDetailFromMovieCardMovieResp[];
-}
 
 export class HomePage extends GlobalPage {
   private static instance: HomePage;

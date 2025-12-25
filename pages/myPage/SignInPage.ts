@@ -1,14 +1,11 @@
 import { Locator, Page } from "@playwright/test";
 import { GlobalPage } from "./GlobalPage";
 import { IBaseOutput, IGoInput } from "../../src/interfaces/commons";
+import { ISignInResp } from "../../src/interfaces/auths";
 import { TLocale } from "../../src/types/locale";
 import { LANGUAGE } from "../../src/constants/language";
 import { SIGN_IN_PAGE_DOMAIN } from "../../src/constants/endpoint";
 import { normalizeUrl } from "../../helpers/utils";
-
-export interface ISignInResp {
-  isSuccess: boolean;
-}
 
 export class SignInPage extends GlobalPage {
   private static instance: SignInPage;
@@ -28,6 +25,7 @@ export class SignInPage extends GlobalPage {
     super(page);
 
     this.LANG = LANGUAGE[locale];
+
     this.accountLocator = this.page.locator("#taiKhoan");
     this.passwordLocator = this.page.locator("#matKhau");
     this.signInCtaBtnLocator = this.page.locator(

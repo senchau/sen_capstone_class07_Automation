@@ -1,5 +1,9 @@
 import { Page } from "@playwright/test";
 import { IBaseOutput, IGoInput } from "../../src/interfaces/commons";
+import {
+  IGetMovieDetailResp,
+  IMovieDetailResp,
+} from "../../src/interfaces/movies";
 import { TLocale } from "../../src/types/locale";
 import { LANGUAGE } from "../../src/constants/language";
 import {
@@ -10,46 +14,6 @@ import { MovieModel } from "../../src/models/Movie";
 import { CinemaModel, CinemaClusterModel } from "../../src/models/Cinema";
 import { ShowtimeModel } from "../../src/models/Showtime";
 import { normalizeUrl } from "../../helpers/utils";
-
-export interface IShowtimeResp {
-  maLichChieu: string;
-  maRap: string;
-  tenRap: string;
-  ngayChieuGioChieu: string;
-  giaVe: number;
-  thoiLuong: number;
-}
-
-export interface ICinemaClusterResp {
-  lichChieuPhim: IShowtimeResp[];
-  maCumRap: string;
-  tenCumRap: string;
-  hinhAnh: string | null;
-}
-
-export interface ICinemaSystemResp {
-  cumRapChieu: ICinemaClusterResp[];
-  maHeThongRap: string;
-  tenHeThongRap: string;
-  logo: string;
-}
-
-export interface IMovieDetailResp {
-  heThongRapChieu: ICinemaSystemResp[];
-  maPhim: number;
-  tenPhim: string;
-  biDanh: string;
-  trailer: string;
-  hinhAnh: string;
-  moTa: string;
-  maNhom: string;
-  ngayKhoiChieu: string;
-  danhGia: number;
-}
-
-export interface IGetMovieDetailResp {
-  movie: MovieModel;
-}
 
 export class MovieDetailPage {
   private static instance: MovieDetailPage;

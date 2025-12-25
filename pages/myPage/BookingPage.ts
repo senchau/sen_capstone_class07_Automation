@@ -1,35 +1,17 @@
 import { Page, Locator } from "@playwright/test";
 import { GlobalPage } from "./GlobalPage";
 import { IBaseOutput, IGoInput } from "../../src/interfaces/commons";
+import {
+  IGetSeatListQuery,
+  IGetSeatListResp,
+  ISeatResp,
+  ISelectSeatByOrderResponse,
+} from "../../src/interfaces/bookings";
 import { TLocale } from "../../src/types/locale";
 import { LANGUAGE } from "../../src/constants/language";
 import { HOME_PAGE_DOMAIN, SEAT_LIST_API } from "../../src/constants/endpoint";
 import { SeatModel } from "../../src/models/Seat";
 import { normalizeUrl } from "../../helpers/utils";
-
-export interface ISeatResp {
-  maGhe: number;
-  maRap: number;
-  taiKhoanNguoiDat: string | null;
-  stt: string;
-  tenGhe: string;
-  loaiGhe: "Thuong" | "Vip";
-  giaVe: number;
-  daDat: boolean;
-}
-
-export interface IGetSeatListQuery {
-  isBooked?: boolean;
-}
-
-export interface IGetSeatListResp {
-  seats: SeatModel[];
-  total: number;
-}
-
-export interface ISelectSeatByOrderResponse {
-  locator: Locator;
-}
 
 export class BookingPage extends GlobalPage {
   private static instance: BookingPage;
