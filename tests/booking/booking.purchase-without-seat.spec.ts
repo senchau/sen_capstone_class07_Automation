@@ -1,18 +1,16 @@
-import test, { expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
-import userMockData from "../../data/user.json";
-import { UserModel } from "../../src/models/User";
+import { test, expect } from "../../fixtures/user";
 import { SignInPage } from "../../pages/myPage/SignInPage";
 import { HomePage } from "../../pages/myPage/HomePage";
 import { MovieDetailPage } from "../../pages/myPage/MovieDetailPage";
 import { BookingPage } from "../../pages/myPage/BookingPage";
 import { TLocale } from "../../src/types/locale";
-import { TUserType } from "../../src/types/user";
 import { LANGUAGE } from "../../src/constants/language";
 
 test("Hiển thị cảnh báo khi người dùng đặt vé mà chưa chọn ghế", async ({
   page,
   context,
+  mockUser,
 }) => {
   const locale: TLocale = "VI";
   const LANG = LANGUAGE[locale];
@@ -21,18 +19,9 @@ test("Hiển thị cảnh báo khi người dùng đặt vé mà chưa chọn gh
 
   const signInPage = await SignInPage.go(page, { locale });
 
-  const userTest = new UserModel({
-    username: userMockData.username,
-    password: userMockData.password,
-    email: userMockData.email,
-    userType: userMockData.userType as TUserType,
-    firstName: userMockData.firstName,
-    lastName: userMockData.lastName,
-  });
-
   const { data: signInData } = await signInPage.signIn(
-    userTest.username,
-    userTest.password
+    mockUser.username,
+    mockUser.password
   );
   expect(signInData?.isSuccess, "Đăng nhập không thành công").toEqual(true);
 
