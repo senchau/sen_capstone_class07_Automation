@@ -40,6 +40,7 @@ export const LANGUAGE: Record<Locale, Record<string, string>> = {
     signInSuccessfullyMessage: "Đăng nhập thành công",
 
     bookingBuyTicketBtn: "ĐẶT VÉ",
+    bookingBuyTNowicketBtn: "MUA VÉ NGAY",
     bookingUnauthenticatedMessage: "Bạn chưa đăng nhập",
     bookingUnselectSeatMessage: "Bạn chưa chọn ghế",
     bookingSuccessfullyMessage: "Đặt vé thành công",

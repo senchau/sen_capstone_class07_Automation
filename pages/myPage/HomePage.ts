@@ -40,6 +40,17 @@ export interface IGetShowtimeListFromFilterResp {
   total: number;
 }
 
+export interface IGetMovieDetailFromMovieCardMovieResp {
+  id: string;
+  title: string;
+  description: string;
+  posterUrl: string;
+}
+
+export interface IGetMovieDetailFromMovieCardResp {
+  movies: IGetMovieDetailFromMovieCardMovieResp[];
+}
+
 export class HomePage extends GlobalPage {
   private static instance: HomePage;
   protected readonly page: Page;
@@ -49,6 +60,8 @@ export class HomePage extends GlobalPage {
   private readonly cinemaFilterLocator!: Locator;
   private readonly showtimeFilterLocator!: Locator;
   private readonly buyTicketFilterBtnLocator!: Locator;
+  private readonly movieCarouselItemLocator!: Locator;
+  private readonly movieCarouselBtnLocator!: (slideNumber: number) => Locator;
 
   public movieModels: MovieModel[] = [];
   public movieTotal: number = 0;
@@ -63,8 +76,15 @@ export class HomePage extends GlobalPage {
     this.cinemaFilterLocator = this.page.locator("//select[@name='cinema']");
     this.showtimeFilterLocator = this.page.locator("//select[@name='date']");
     this.buyTicketFilterBtnLocator = this.page.locator(
-      "//button[normalize-space(.//span)='MUA VÉ NGAY']"
+      `//button[normalize-space(.//span)='${this.lang.bookingBuyTNowicketBtn}']`
     );
+    this.movieCarouselItemLocator = this.page.locator(
+      `//div[contains(@class,'CarouselItem')]//a[not(ancestor::a)][1]`
+    );
+    this.movieCarouselBtnLocator = (slideNumber: number) =>
+      this.page.locator(
+        `//div[contains(@class,'CarouselItem') and .//a]/following-sibling::div[1]/button[${slideNumber}]`
+      );
   }
 
   public static async go(page: Page, input: IGoInput): Promise<HomePage> {
@@ -122,7 +142,7 @@ export class HomePage extends GlobalPage {
               slug: resp.biDanh,
               trailerUrl: resp.trailer,
               posterUrl: resp.hinhAnh,
-              description: resp.moTa,
+              description: resp.moTa.trim(),
               releaseDate: new Date(resp.ngayKhoiChieu),
               rating: resp.danhGia,
             })
@@ -183,6 +203,7 @@ export class HomePage extends GlobalPage {
       };
     }
   }
+
   async getCinemaListFromFilter(): Promise<
     IBaseOutput<IGetCinemaListFromFilterResp>
   > {
@@ -209,6 +230,85 @@ export class HomePage extends GlobalPage {
 
       console.log({
         context: "HomePage.getCinemaListFromFilter",
+        errorMessage,
+      });
+
+      return {
+        errorMessage,
+        data: null,
+      };
+    }
+  }
+
+  async getMovieDetailFromCarousel(
+    slideNumber: number = 1
+  ): Promise<IBaseOutput<IGetMovieDetailFromMovieCardResp>> {
+    try {
+      let movies: IGetMovieDetailFromMovieCardMovieResp[] = [];
+      const movieCarouselBtnLocator = this.movieCarouselBtnLocator(slideNumber);
+      await this.click(movieCarouselBtnLocator);
+      await this.page.waitForTimeout(300);
+
+      const allMovidecardLocator = await this.movieCarouselItemLocator.all();
+
+      for (const eachMovieCardLocator of allMovidecardLocator) {
+        const movieObject: IGetMovieDetailFromMovieCardMovieResp = {
+          id: "",
+          title: "",
+          description: "",
+          posterUrl: "",
+        };
+
+        const href = await eachMovieCardLocator.getAttribute("href");
+        const hrefPaths = href?.split("/")?.filter((v) => v?.trim()) ?? [];
+
+        if (hrefPaths?.length > 0) {
+          const id = hrefPaths?.[hrefPaths?.length - 1] ?? "";
+          movieObject.id = id;
+        }
+
+        const posterContainerLocator = await eachMovieCardLocator.locator(
+          "xpath=./div/div[1]"
+        );
+        const posterUrl = await posterContainerLocator.evaluate((el) => {
+          const bg = getComputedStyle(el).backgroundImage;
+          const match = bg.match(/url\(["']?(.*?)["']?\)/);
+          return match ? match[1] : "";
+        });
+        movieObject.posterUrl = posterUrl;
+
+        const infoContainerLocator = await eachMovieCardLocator.locator(
+          "xpath=./div/div[2]"
+        );
+        const ageRestricted = await infoContainerLocator
+          .locator("//span")
+          .innerText();
+        const titleLocator = await infoContainerLocator.locator(
+          "xpath=./div[1]/div[1]"
+        );
+        let title = (await titleLocator.textContent()) || "";
+        title = title.replace(ageRestricted, "");
+        movieObject.title = title;
+
+        const descriptionLocator = eachMovieCardLocator.locator("h4");
+        if (await descriptionLocator.isVisible()) {
+          const description = await descriptionLocator.innerText();
+          movieObject.description = description.trim();
+        }
+
+        movies.push(movieObject);
+      }
+
+      return {
+        data: {
+          movies,
+        },
+      };
+    } catch (err) {
+      const errorMessage = (err as Error)?.message;
+
+      console.log({
+        context: "HomePage.getMovieDetailFromCarousel",
         errorMessage,
       });
 
