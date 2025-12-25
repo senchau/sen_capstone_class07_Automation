@@ -1,12 +1,12 @@
 import test, { expect } from "@playwright/test";
 import { HomePage } from "../../pages/myPage/HomePage";
-import { Locale } from "../../pages/types";
+import { TLocale } from "../../src/types/locale";
 
 test("Hiển thị danh sách phim phải đúng với API trả về", async ({
   page,
   context,
 }) => {
-  const locale: Locale = "vi";
+  const locale: TLocale = "VI";
   await context.clearCookies();
 
   const homePage = await HomePage.go(page, { locale });
@@ -56,6 +56,6 @@ test("Hiển thị danh sách phim phải đúng với API trả về", async ({
       movieModel.posterUrl
     );
 
-    console.log(`${movieModel.title} Passed`)
+    console.log(`${movieModel.title} Passed`);
   });
 });

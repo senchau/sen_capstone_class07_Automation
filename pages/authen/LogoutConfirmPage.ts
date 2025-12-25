@@ -1,7 +1,7 @@
 import { Page, Locator } from "@playwright/test";
 import { BasePage } from "../common/BasePage";
 import { LANGUAGE } from "../constants";
-import { Locale } from '../types'
+import { TLocale } from '../types'
 
 export class LogoutConfirmPage extends BasePage {
 
@@ -11,7 +11,7 @@ export class LogoutConfirmPage extends BasePage {
     readonly cancelBtnLocator: Locator
     readonly logoutSuccessfullyMessageLocator!: Locator
 
-    constructor(page: Page, locale: Locale) {
+    constructor(page: Page, locale: TLocale) {
         super(page);
 
         this.lang = LANGUAGE[locale];

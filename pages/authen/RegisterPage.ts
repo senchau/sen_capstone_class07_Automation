@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "../common/BasePage";
-import { Locale } from '../types'
+import { TLocale } from '../types'
 import { LANGUAGE } from '../constants'
 import { faker } from '@faker-js/faker';
 import { UserModel } from '../../models/User'
@@ -24,7 +24,7 @@ export class RegisterPage extends BasePage {
   readonly registerSuccessfullyMessageLocator!: Locator
 
 
-  constructor(page: Page, locale: Locale) {
+  constructor(page: Page, locale: TLocale) {
     super(page);
 
     this.lang = LANGUAGE[locale]

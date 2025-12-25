@@ -1,10 +1,11 @@
 import { Page, Locator } from "@playwright/test";
 import { GlobalPage } from "./GlobalPage";
-import { IBaseOutput, IGoInput } from "../interfaces";
-import { Locale } from "../types";
-import { LANGUAGE, HOME_PAGE_DOMAIN, SEAT_LIST_API } from "../constants";
-import { SeatModel } from "../../models/Seat";
-import { normalizeUrl } from "../../utils/normalizeUrl";
+import { IBaseOutput, IGoInput } from "../../src/interfaces/commons";
+import { TLocale } from "../../src/types/locale";
+import { LANGUAGE } from "../../src/constants/language";
+import { HOME_PAGE_DOMAIN, SEAT_LIST_API } from "../../src/constants/endpoint";
+import { SeatModel } from "../../src/models/Seat";
+import { normalizeUrl } from "../../helpers/utils";
 
 export interface ISeatResp {
   maGhe: number;
@@ -32,7 +33,7 @@ export interface ISelectSeatByOrderResponse {
 
 export class BookingPage extends GlobalPage {
   private static instance: BookingPage;
-  private readonly lang: Record<string, string>;
+  private readonly LANG: Record<string, string>;
 
   private readonly seatsLocator!: Locator;
   private readonly buyTicketBtnLocator!: Locator;
@@ -41,15 +42,15 @@ export class BookingPage extends GlobalPage {
   public seatModels: SeatModel[] = [];
   public seatTotal: number = 0;
 
-  constructor(page: Page, showtimeId: string, locale: Locale) {
+  constructor(page: Page, showtimeId: string, locale: TLocale) {
     super(page);
 
     this.showtimeId = showtimeId;
-    this.lang = LANGUAGE[locale];
+    this.LANG = LANGUAGE[locale];
 
     this.seatsLocator = this.page.locator("//button[@tabindex]");
     this.buyTicketBtnLocator = this.page.locator(
-      `//button[contains(normalize-space(), '${this.lang.bookingBuyTicketBtn}')]`
+      `//button[contains(normalize-space(), '${this.LANG.BOOKING_BUY_TICKET_BTN}')]`
     );
   }
 

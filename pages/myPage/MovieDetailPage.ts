@@ -1,11 +1,15 @@
 import { Page } from "@playwright/test";
-import { IBaseOutput, IGoInput } from "../interfaces";
-import { Locale } from "../types";
-import { LANGUAGE, HOME_PAGE_DOMAIN, MOVIE_DETAIL_API } from "../constants";
-import { MovieModel } from "../../models/Movie";
-import { CinemaModel, CinemaClusterModel } from "../../models/Cinema";
-import { ShowtimeModel } from "../../models/Showtime";
-import { normalizeUrl } from "../../utils/normalizeUrl";
+import { IBaseOutput, IGoInput } from "../../src/interfaces/commons";
+import { TLocale } from "../../src/types/locale";
+import { LANGUAGE } from "../../src/constants/language";
+import {
+  HOME_PAGE_DOMAIN,
+  MOVIE_DETAIL_API,
+} from "../../src/constants/endpoint";
+import { MovieModel } from "../../src/models/Movie";
+import { CinemaModel, CinemaClusterModel } from "../../src/models/Cinema";
+import { ShowtimeModel } from "../../src/models/Showtime";
+import { normalizeUrl } from "../../helpers/utils";
 
 export interface IShowtimeResp {
   maLichChieu: string;
@@ -50,15 +54,15 @@ export interface IGetMovieDetailResp {
 export class MovieDetailPage {
   private static instance: MovieDetailPage;
   private readonly page!: Page;
-  private readonly lang: Record<string, string>;
+  private readonly LANG: Record<string, string>;
 
   public movieId: string;
   public movieModel: MovieModel | null = null;
 
-  private constructor(page: Page, movieId: string, locale: Locale) {
+  private constructor(page: Page, movieId: string, locale: TLocale) {
     this.page = page;
     this.movieId = movieId;
-    this.lang = LANGUAGE[locale];
+    this.LANG = LANGUAGE[locale];
   }
 
   public static async go(

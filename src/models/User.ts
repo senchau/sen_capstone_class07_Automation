@@ -1,13 +1,4 @@
-type TUserType = "Customer";
-
-type TUser = {
-  username: string;
-  password: string;
-  email: string;
-  userType: TUserType;
-  firstName: string;
-  lastName: string;
-};
+import { TUser, TUserType } from "../types/user";
 
 export class UserModel {
   public username: string;

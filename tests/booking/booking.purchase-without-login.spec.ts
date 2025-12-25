@@ -3,15 +3,15 @@ import { faker } from "@faker-js/faker";
 import { HomePage } from "../../pages/myPage/HomePage";
 import { MovieDetailPage } from "../../pages/myPage/MovieDetailPage";
 import { BookingPage } from "../../pages/myPage/BookingPage";
-import { Locale } from "../../pages/types";
-import { LANGUAGE } from "../../pages/constants";
+import { TLocale } from "../../src/types/locale";
+import { LANGUAGE } from "../../src/constants/language";
 
 test("Hiển thị cảnh báo khi người dùng đặt vé mà chưa đăng nhập", async ({
   page,
   context,
 }) => {
-  const locale: Locale = "vi";
-  const lang = LANGUAGE[locale];
+  const locale: TLocale = "VI";
+  const LANG = LANGUAGE[locale];
 
   await context.clearCookies();
 
@@ -80,5 +80,5 @@ test("Hiển thị cảnh báo khi người dùng đặt vé mà chưa đăng nh
 
   const { data: modalContentData } = await bookingPage.getModalContent();
   console.log(`Lỗi: ${modalContentData?.title}`);
-  expect(modalContentData?.title).toBe(lang.bookingUnauthenticatedMessage);
+  expect(modalContentData?.title).toBe(LANG.BOOKING_UNAUTHENTICATED_MESSAGE);
 });

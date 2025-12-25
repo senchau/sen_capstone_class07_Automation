@@ -1,9 +1,10 @@
 import { Locator, Page } from "@playwright/test";
 import { GlobalPage } from "./GlobalPage";
-import { IBaseOutput, IGoInput } from "../interfaces";
-import { Locale } from "../types";
-import { LANGUAGE, SIGN_IN_PAGE_DOMAIN } from "../constants";
-import { normalizeUrl } from "../../utils/normalizeUrl";
+import { IBaseOutput, IGoInput } from "../../src/interfaces/commons";
+import { TLocale } from "../../src/types/locale";
+import { LANGUAGE } from "../../src/constants/language";
+import { SIGN_IN_PAGE_DOMAIN } from "../../src/constants/endpoint";
+import { normalizeUrl } from "../../helpers/utils";
 
 export interface ISignInResp {
   isSuccess: boolean;
@@ -11,7 +12,7 @@ export interface ISignInResp {
 
 export class SignInPage extends GlobalPage {
   private static instance: SignInPage;
-  private readonly lang: Record<string, string>;
+  private readonly LANG: Record<string, string>;
 
   private readonly accountLocator!: Locator;
   private readonly passwordLocator!: Locator;
@@ -23,14 +24,14 @@ export class SignInPage extends GlobalPage {
   private readonly passwordLoginErrorMessageLocator!: Locator;
   private readonly globalLoginErrorMesageLocator!: Locator;
 
-  constructor(page: Page, locale: Locale) {
+  constructor(page: Page, locale: TLocale) {
     super(page);
 
-    this.lang = LANGUAGE[locale];
+    this.LANG = LANGUAGE[locale];
     this.accountLocator = this.page.locator("#taiKhoan");
     this.passwordLocator = this.page.locator("#matKhau");
     this.signInCtaBtnLocator = this.page.locator(
-      `//button[@type='submit'][normalize-space()='${this.lang?.signInCtaBtn}']`
+      `//button[@type='submit'][normalize-space()='${this.LANG.SIGN_IN_CTA_BTN}']`
     );
     this.loginTextLocator = this.page.locator(`//h1[text()='Đăng nhập']`);
     this.loginSuccessfullyMessageLocator = this.page.getByRole("heading", {
@@ -121,7 +122,7 @@ export class SignInPage extends GlobalPage {
       await this.click(this.signInCtaBtnLocator);
 
       const content = await this.getModalContent();
-      if (content.data?.title !== this.lang?.signInSuccessfullyMessage) {
+      if (content.data?.title !== this.LANG.SIGN_IN_SUCCESSFULLY_MESSAGE) {
         throw new Error("Sign-in failed. Please try again");
       }
 

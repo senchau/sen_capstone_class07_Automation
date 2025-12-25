@@ -1,7 +1,7 @@
 import { expect, Locator, Page } from "@playwright/test";
 import { CommonPage } from '../common/CommonPage';
 import { LANGUAGE } from "../constants";
-import { Locale } from "../types";
+import { TLocale } from "../types";
 import { BasePage } from "../common/BasePage";
 
 
@@ -14,7 +14,7 @@ export class HomePage extends BasePage {
     readonly movieTitleLocator!: Locator
     
 
-    constructor(page: Page, locale: Locale) {
+    constructor(page: Page, locale: TLocale) {
         super(page);
         this.lang = LANGUAGE[locale]
       

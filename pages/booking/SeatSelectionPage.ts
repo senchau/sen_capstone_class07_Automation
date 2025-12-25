@@ -2,7 +2,7 @@
 import { Locator, Page } from "@playwright/test";
 import { MovieDetailPage } from './MovieDetailPage';
 import { HomePage } from "../menu_pages/HomePage";
-import { Locale } from "../types";
+import { TLocale } from "../types";
 import { LANGUAGE } from "../constants";
 import { BasePage } from "../common/BasePage";
 
@@ -19,7 +19,7 @@ export class SeatSelectionPage extends BasePage {
 
 
 
-    constructor(page: Page, locale: Locale) {
+    constructor(page: Page, locale: TLocale) {
             super(page);
     
             this.lang = LANGUAGE[locale]

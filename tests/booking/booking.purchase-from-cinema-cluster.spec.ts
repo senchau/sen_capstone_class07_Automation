@@ -1,22 +1,35 @@
 import test, { expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
+import userMockData from "../../data/user.json";
+import { UserModel } from "../../src/models/User";
 import { SignInPage } from "../../pages/myPage/SignInPage";
 import { HomePage } from "../../pages/myPage/HomePage";
 import { BookingPage } from "../../pages/myPage/BookingPage";
-import { Locale } from "../../pages/types";
-import { LANGUAGE, userTest } from "../../pages/constants";
+import { TLocale } from "../../src/types/locale";
+import { TUserType } from "../../src/types/user";
+import { LANGUAGE } from "../../src/constants/language";
 
 // TODO: keep clone from purchase from filter case
 test("Hiển thị thông báo người dùng đã mua vé thành công khi mua từ cụm rạp", async ({
   page,
   context,
 }) => {
-  const locale: Locale = "vi";
-  const lang = LANGUAGE[locale];
+  const locale: TLocale = "VI";
+  const LANG = LANGUAGE[locale];
 
   await context.clearCookies();
 
   const signInPage = await SignInPage.go(page, { locale });
+
+  const userTest = new UserModel({
+    username: userMockData.username,
+    password: userMockData.password,
+    email: userMockData.email,
+    userType: userMockData.userType as TUserType,
+    firstName: userMockData.firstName,
+    lastName: userMockData.lastName,
+  });
+
   const { data: signInData } = await signInPage.signIn(
     userTest.username,
     userTest.password
@@ -145,5 +158,5 @@ test("Hiển thị thông báo người dùng đã mua vé thành công khi mua 
 
   const { data: modalContentData } = await bookingPage.getModalContent();
   console.log(`${modalContentData?.title}`);
-  expect(modalContentData?.title).toBe(lang.bookingSuccessfullyMessage);
+  expect(modalContentData?.title).toBe(LANG.BOOKING_SUCCESSFULLY_MESSAGE);
 });

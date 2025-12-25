@@ -1,7 +1,7 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "../common/BasePage";
 import { LANGUAGE } from "../constants";
-import { Locale } from "../types"
+import { TLocale } from "../types"
 
 
 export class BookingHistoryPage extends BasePage {
@@ -11,7 +11,7 @@ export class BookingHistoryPage extends BasePage {
 
 
 
-    constructor(page: Page, locale: Locale) {
+    constructor(page: Page, locale: TLocale) {
         super(page);
         this.lang = LANGUAGE[locale]
         this.bookingHistoryTxtLocator = this.page.getByRole('heading', { name: 'Lịch sử đặt vé' });

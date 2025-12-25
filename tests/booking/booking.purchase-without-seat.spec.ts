@@ -1,22 +1,35 @@
 import test, { expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
+import userMockData from "../../data/user.json";
+import { UserModel } from "../../src/models/User";
 import { SignInPage } from "../../pages/myPage/SignInPage";
 import { HomePage } from "../../pages/myPage/HomePage";
 import { MovieDetailPage } from "../../pages/myPage/MovieDetailPage";
 import { BookingPage } from "../../pages/myPage/BookingPage";
-import { Locale } from "../../pages/types";
-import { LANGUAGE, userTest } from "../../pages/constants";
+import { TLocale } from "../../src/types/locale";
+import { TUserType } from "../../src/types/user";
+import { LANGUAGE } from "../../src/constants/language";
 
 test("Hiển thị cảnh báo khi người dùng đặt vé mà chưa chọn ghế", async ({
   page,
   context,
 }) => {
-  const locale: Locale = "vi";
-  const lang = LANGUAGE[locale];
+  const locale: TLocale = "VI";
+  const LANG = LANGUAGE[locale];
 
   await context.clearCookies();
 
   const signInPage = await SignInPage.go(page, { locale });
+
+  const userTest = new UserModel({
+    username: userMockData.username,
+    password: userMockData.password,
+    email: userMockData.email,
+    userType: userMockData.userType as TUserType,
+    firstName: userMockData.firstName,
+    lastName: userMockData.lastName,
+  });
+
   const { data: signInData } = await signInPage.signIn(
     userTest.username,
     userTest.password
@@ -64,5 +77,5 @@ test("Hiển thị cảnh báo khi người dùng đặt vé mà chưa chọn gh
 
   const { data: modalContentData } = await bookingPage.getModalContent();
   console.log(`Lỗi: ${modalContentData?.title}`);
-  expect(modalContentData?.title).toBe(lang.bookingUnselectSeatMessage);
+  expect(modalContentData?.title).toBe(LANG.BOOKING_UNSELECT_SEAT_MESSAGE);
 });

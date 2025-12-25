@@ -3,7 +3,7 @@ import { CommonPage } from "../common/CommonPage";
 import { HomePage } from "../menu_pages/HomePage";
 import { BasePage } from "../common/BasePage";
 import { LANGUAGE } from "../constants";
-import { Locale } from '../types'
+import { TLocale } from '../types'
 
 export class MovieDetailPage extends BasePage {
     private readonly lang: Record<string, string>;
@@ -15,7 +15,7 @@ export class MovieDetailPage extends BasePage {
     readonly btnMuaVeLocator!: Locator
     readonly btnSelectTimeSlotLocator!: Locator
 
-    constructor(page: Page, locale: Locale) {
+    constructor(page: Page, locale: TLocale) {
         super(page);
         this.lang = LANGUAGE[locale]
         this.txtMovieTitleLocator = this.page.locator("h1.MuiTypography-h1");

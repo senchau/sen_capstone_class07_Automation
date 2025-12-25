@@ -1,12 +1,13 @@
 import { Page, Locator } from "@playwright/test";
 import { GlobalPage, IGetOptionsOptionsResp } from "./GlobalPage";
-import { IBaseOutput, IGoInput } from "../interfaces";
-import { Locale } from "../types";
-import { LANGUAGE, HOME_PAGE_DOMAIN, MOVIE_LIST_API } from "../constants";
-import { MovieModel } from "../../models/Movie";
-import { CinemaModel } from "../../models/Cinema";
-import { ShowtimeModel } from "../../models/Showtime";
-import { normalizeUrl } from "../../utils/normalizeUrl";
+import { IBaseOutput, IGoInput } from "../../src/interfaces/commons";
+import { TLocale } from "../../src/types/locale";
+import { LANGUAGE } from "../../src/constants/language";
+import { HOME_PAGE_DOMAIN, MOVIE_LIST_API } from "../../src/constants/endpoint";
+import { MovieModel } from "../../src/models/Movie";
+import { CinemaModel } from "../../src/models/Cinema";
+import { ShowtimeModel } from "../../src/models/Showtime";
+import { normalizeUrl } from "../../helpers/utils";
 
 export interface IMovieResp {
   maPhim: number;
@@ -66,7 +67,7 @@ export class HomePage extends GlobalPage {
   public movieModels: MovieModel[] = [];
   public movieTotal: number = 0;
 
-  private constructor(page: Page, locale: Locale) {
+  private constructor(page: Page, locale: TLocale) {
     super(page);
 
     this.page = page;

@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "../common/BasePage";
-import { Locale } from "../types";
+import { TLocale } from "../types";
 import { LANGUAGE } from "../constants";
 
 export class UserDetailPage extends BasePage {
@@ -20,7 +20,7 @@ export class UserDetailPage extends BasePage {
     readonly emailExistMessageLocator !: Locator
     readonly updateSuccessfullyMessageLocator!: Locator
 
-    constructor(page: Page, locale: Locale) {
+    constructor(page: Page, locale: TLocale) {
         super(page);
 
         this.lang = LANGUAGE[locale]

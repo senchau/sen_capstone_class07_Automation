@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { IBaseOutput } from "../interfaces";
+import { IBaseOutput } from "../../src/interfaces/commons";
 
 export interface IGetOptionsOptionsResp {
   locator: Locator;

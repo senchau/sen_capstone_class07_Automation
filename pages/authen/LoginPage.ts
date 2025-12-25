@@ -1,7 +1,7 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "../common/BasePage";
 import { LANGUAGE } from "../constants";
-import { Locale } from "../types";
+import { TLocale } from "../types";
 
 
 export class LoginPage extends BasePage {
@@ -17,7 +17,7 @@ export class LoginPage extends BasePage {
     readonly globalLoginErrorMesageLocator!: Locator
 
 
-    constructor(page: Page, locale: Locale) {
+    constructor(page: Page, locale: TLocale) {
         super(page);
 
         this.lang = LANGUAGE[locale]
